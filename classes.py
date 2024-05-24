@@ -4,6 +4,7 @@ import wave
 import numpy as np
 import threading
 
+
 class VideoCapture:
     def __init__(self, cam_number: int):
         self.cam_number = cam_number
