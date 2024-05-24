@@ -2,7 +2,7 @@ from video import *
 
 
 def start():
-    camera = VideoCapture()
+    camera = VideoCapture(cam_number=0)
     camera.video_save()
 
 

@@ -3,8 +3,9 @@ import cv2
 
 
 class VideoCapture:
-    def __init__(self):
-        self.cap = cv2.VideoCapture(0)
+    def __init__(self, cam_number: int):
+        self.cam_number = cam_number
+        self.cap = cv2.VideoCapture(self.cam_number)
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
         self.out = cv2.VideoWriter('camera_0.avi', self.fourcc, 25.0, (640, 480))
 
