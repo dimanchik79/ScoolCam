@@ -1,4 +1,6 @@
 import sys
+import time
+
 import pyaudio
 import subprocess
 import os
@@ -11,16 +13,17 @@ from videorecorder import VideoRecorder
 
 
 def start():
-    app = QApplication(sys.argv)
-    main_window = StartWindow()
-    main_window.show()
-    sys.exit(app.exec())
+    camera = VideoRecorder(cam_number=0)
+    camera.video_save()
+    cmd = "ffmpeg -y -i camera_0.avi -i audio_0.wav -c:v copy -c:a aac record_camera_0.avi"
+    subprocess.call(cmd, shell=True)
 
-    # camera = VideoRecorder(cam_number=0)
-    # camera.video_save()
+    # app = QApplication(sys.argv)
+    # main_window = StartWindow()
+    # main_window.show()
+    # sys.exit(app.exec())
 
-    # cmd = "ffmpeg -i camera_0.wav -i camera_0.avi -c:v copy -c:a aac record_camera_0.avi"
-    # subprocess.call(cmd, shell=True)
+
     # os.remove("camera_0.wav")
     # os.remove("camera_0.avi")
 
