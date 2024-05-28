@@ -25,7 +25,7 @@ class VideoRecorder:
                                             frames_per_buffer=self.frames_per_buffer)
 
     def video_save(self):
-        self.cap.set(cv2.CAP_PROP_FPS, 30)
+        self.cap.set(cv2.CAP_PROP_FPS, 60)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
