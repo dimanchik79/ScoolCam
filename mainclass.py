@@ -26,12 +26,17 @@ class StartWindow(QMainWindow):
         super(StartWindow, self).__init__()
         uic.loadUi("GUI/main.ui", self)
         self.setFixedSize(1120, 756)
-
         self.cameras = cameras
         self.microphones = microphones
         self.message = []
 
+        self.clear_cons.clicked.connect(self.clear_console)
+
         self.set_message("Добро пожаловать в ScoolCam!!!")
+
+    def clear_console(self):
+        self.message = []
+        self.console.clear()
 
     def set_message(self, msg: str) -> None:
         message = ""

@@ -245,7 +245,7 @@ background-color: rgb(234, 234, 234)</string>
      <string>Название аудитории:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_10">
+   <widget class="QPushButton" name="clear_cons">
     <property name="geometry">
      <rect>
       <x>1080</x>
@@ -258,7 +258,7 @@ background-color: rgb(234, 234, 234)</string>
      <string>Очистить консоль</string>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 0;</string>
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
     </property>
     <property name="text">
      <string/>

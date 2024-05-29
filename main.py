@@ -1,9 +1,11 @@
 import sys
-
 import speech_recognition as sr
+
+from os import path
 from pygrabber.dshow_graph import FilterGraph
 
 from PyQt5.QtWidgets import QApplication
+from models import Configurations
 from mainclass import StartWindow
 
 
@@ -20,7 +22,6 @@ def define_devices():
 
 
 def start():
-
     cams, mics = define_devices()
     app = QApplication(sys.argv)
     main_window = StartWindow(cameras=cams, microphones=mics)
@@ -29,4 +30,6 @@ def start():
 
 
 if __name__ == "__main__":
+    if not path.exists('DB/base.db'):
+        Configurations.create_table()
     start()
