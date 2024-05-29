@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -134,6 +137,9 @@ background-color: rgb(255, 253, 225);</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="console">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -141,6 +147,11 @@ background-color: rgb(255, 253, 225);</string>
       <width>561</width>
       <height>271</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">border: 1px solid black;
