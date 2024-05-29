@@ -4,7 +4,7 @@ import speech_recognition as sr
 from pygrabber.dshow_graph import FilterGraph
 
 from PyQt5.QtWidgets import QApplication
-from gui import StartWindow
+from mainclass import StartWindow
 
 
 def define_devices():
