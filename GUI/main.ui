@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1097</width>
-    <height>850</height>
+    <width>1120</width>
+    <height>756</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,390 +17,29 @@
    <iconset>
     <normaloff>../IMG/icon.png</normaloff>../IMG/icon.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">font-size: 14px;
+background-color: rgb(255, 253, 225);</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>8</x>
-      <y>70</y>
-      <width>1081</width>
-      <height>721</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-size: 14px;
-border: 1px solid rgb(0, 0, 0);</string>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>auditoria_1</string>
-     </attribute>
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>30</y>
-        <width>511</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>640</y>
-        <width>151</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;</string>
-      </property>
-      <property name="text">
-       <string>Добавить камеру </string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>640</y>
-        <width>161</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 1px solid rgb(255, 0, 0);
-border-radius: 10px;</string>
-      </property>
-      <property name="text">
-       <string>Удалить камеру </string>
-      </property>
-     </widget>
-     <widget class="QToolButton" name="tb1">
-      <property name="geometry">
-       <rect>
-        <x>500</x>
-        <y>640</y>
-        <width>41</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Начать запись со всех камер</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QToolButton::checked {
-border-radius: 5px;
-background-color: rgb(255, 0, 127);
-}</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../IMG/record.png</normaloff>../IMG/record.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>36</width>
-        <height>36</height>
-       </size>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="checked">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeat">
-       <bool>false</bool>
-      </property>
-      <property name="toolButtonStyle">
-       <enum>Qt::ToolButtonIconOnly</enum>
-      </property>
-      <property name="autoRaise">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLCDNumber" name="lcdNumber">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>640</y>
-        <width>101</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border-radius: 10px;</string>
-      </property>
-      <property name="smallDecimalPoint">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>6</y>
-        <width>141</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 0;</string>
-      </property>
-      <property name="text">
-       <string>Название аудитории:</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>75</y>
-        <width>301</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 0;</string>
-      </property>
-      <property name="text">
-       <string>Путь, куда будут записываться видеофайлы:</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>100</y>
-        <width>481</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_8">
-      <property name="geometry">
-       <rect>
-        <x>1030</x>
-        <y>100</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Выбрать путь для записи</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../IMG/open_table.ico</normaloff>../IMG/open_table.ico</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>26</width>
-        <height>26</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_9">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>160</y>
-        <width>511</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">font-size: 14px;
-border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;</string>
-      </property>
-      <property name="text">
-       <string>Монтаж видео - финальный этап</string>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../IMG/icon.png</normaloff>../IMG/icon.png</iconset>
-      </property>
-     </widget>
-     <widget class="QTextEdit" name="textEdit">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>250</y>
-        <width>511</width>
-        <height>431</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>226</y>
-        <width>141</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 0;</string>
-      </property>
-      <property name="text">
-       <string>Служебная консоль:</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_10">
-      <property name="geometry">
-       <rect>
-        <x>1030</x>
-        <y>220</y>
-        <width>31</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Очистить консоль</string>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 0;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../IMG/clear.png</normaloff>../IMG/clear.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>26</width>
-        <height>26</height>
-       </size>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_4">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>131</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border: 0;</string>
-      </property>
-      <property name="text">
-       <string>Активные камеры:</string>
-      </property>
-     </widget>
-     <widget class="QTableWidget" name="cam_table">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>531</width>
-        <height>601</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="add_audit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>541</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#add_audit {
-font-size: 14px;
-border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;
-transition: all 1s;
-}
-
-#add_audit::hover {
-background-color: rgb(200, 200, 200)
-}
-
-
-
-
-</string>
-    </property>
-    <property name="inputMethodHints">
-     <set>Qt::ImhNone</set>
-    </property>
-    <property name="text">
-     <string>Добавить новую аудиторию</string>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-    <property name="flat">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_4">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>20</y>
-      <width>521</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-size: 14px;
-border: 1px solid rgb(255, 0, 0);
-border-radius: 10px;</string>
-    </property>
-    <property name="text">
-     <string>Удалить аудиторию</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="open">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>800</y>
+      <x>680</x>
+      <y>700</y>
       <width>231</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;
-font-size: 14px;</string>
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
     </property>
     <property name="text">
-     <string>Открыть конфигурацию</string>
+     <string>Выход</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../IMG/folder.ico</normaloff>../IMG/folder.ico</iconset>
+      <normaloff>../IMG/exit.png</normaloff>../IMG/exit.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -412,16 +51,14 @@ font-size: 14px;</string>
    <widget class="QPushButton" name="save">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>800</y>
+      <x>440</x>
+      <y>700</y>
       <width>231</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;
-font-size: 14px;</string>
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
     </property>
     <property name="text">
      <string>Сохранить конфигурацию</string>
@@ -437,32 +74,446 @@ font-size: 14px;</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="exit">
+   <widget class="QPushButton" name="open">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>800</y>
+      <x>200</x>
+      <y>700</y>
       <width>231</width>
       <height>41</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border: 1px solid rgb(0, 170, 0);
-border-radius: 10px;
-font-size: 14px;</string>
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
     </property>
     <property name="text">
-     <string>Выход</string>
+     <string>Открыть конфигурацию</string>
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>../IMG/exit.png</normaloff>../IMG/exit.png</iconset>
+      <normaloff>../IMG/folder.ico</normaloff>../IMG/folder.ico</iconset>
     </property>
     <property name="iconSize">
      <size>
       <width>26</width>
       <height>26</height>
      </size>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>100</y>
+      <width>511</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>330</y>
+      <width>511</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string>Монтаж видео - финальный этап</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/edit.png</normaloff>../IMG/edit.png</iconset>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="console">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>410</y>
+      <width>561</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black;
+background-color: rgb(234, 234, 234)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>140</y>
+      <width>301</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string>Путь, куда будут записываться видеофайлы:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>387</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string>Служебная консоль:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_2">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>160</y>
+      <width>481</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="cam_table">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>531</width>
+      <height>651</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>131</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string>Активные камеры:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>76</y>
+      <width>141</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string>Название аудитории:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_10">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>376</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Очистить консоль</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/clear.png</normaloff>../IMG/clear.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>26</width>
+      <height>26</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_8">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>160</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Выбрать путь для записи</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/open_table.ico</normaloff>../IMG/open_table.ico</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>26</width>
+      <height>26</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>200</y>
+      <width>251</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 0;</string>
+    </property>
+    <property name="text">
+     <string>Выбирите источник звука для записи</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>220</y>
+      <width>481</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_11">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>220</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Выбрать путь для записи</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/microphone.png</normaloff>../IMG/microphone.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>26</width>
+      <height>26</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_12">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>30</y>
+      <width>511</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string>Найти активные камеры</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/icon.png</normaloff>../IMG/icon.png</iconset>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek1">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>30</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek2">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>89</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>2</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek3">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>150</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>3</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek4">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>211</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>4</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek6">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>330</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>6</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_13">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>270</y>
+      <width>511</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string>ЗАПИСАТЬ ВИДЕО С АКТИВНЫХ КАМЕР</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/record.png</normaloff>../IMG/record.png</iconset>
+    </property>
+   </widget>
+   <widget class="QLabel" name="chek5">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>270</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid red;
+border-radius: 25px;
+</string>
+    </property>
+    <property name="text">
+     <string>5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

@@ -1,35 +1,35 @@
 import sys
-import time
 
-import pyaudio
-import subprocess
-import os
+import speech_recognition as sr
+from pygrabber.dshow_graph import FilterGraph
 
-from os import path
 from PyQt5.QtWidgets import QApplication
 from gui import StartWindow
 
-from videorecorder import VideoRecorder
+
+def define_devices():
+    available_cameras = {}
+    available_microphone = {}
+    devices = FilterGraph().get_input_devices()
+
+    for device_index, device_name in enumerate(devices):
+        available_cameras[device_index] = device_name
+    for key, words in sr.Microphone.list_working_microphones().items():
+        available_microphone[key] = words.encode('cp1251').decode('utf-8')
+    return available_cameras, available_microphone
 
 
 def start():
-    camera = VideoRecorder(cam_number=0)
-    camera.video_save()
-    cmd = "ffmpeg -y -i camera_0.avi -i audio_0.wav -c:v copy -c:a aac record_camera_0.avi"
-    subprocess.call(cmd, shell=True)
 
-    # app = QApplication(sys.argv)
-    # main_window = StartWindow()
-    # main_window.show()
-    # sys.exit(app.exec())
+    cams, microphones = define_devices()
+    print(cams)
+    print(microphones)
 
-
-    # os.remove("camera_0.wav")
-    # os.remove("camera_0.avi")
+    app = QApplication(sys.argv)
+    main_window = StartWindow()
+    main_window.show()
+    sys.exit(app.exec())
 
 
 if __name__ == "__main__":
-    p = pyaudio.PyAudio()
-    for i in range(p.get_device_count()):
-        print(p.get_device_info_by_index(i))
     start()

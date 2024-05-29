@@ -9,4 +9,4 @@ class StartWindow(QMainWindow):
     def __init__(self, parent=None) -> None:
         super(StartWindow, self).__init__(parent)
         uic.loadUi("GUI/main.ui", self)
-        self.setFixedSize(1097, 850)
+        self.setFixedSize(1120, 756)
