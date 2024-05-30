@@ -10,21 +10,25 @@ from videorecorder import VideoRecorder
 
 
 class VideoStream:
-    def __init__(self, port: List):
-        self.port = port
-        self.video = []
-        for port in self.port:
-            self.video.append(cv2.VideoCapture(port))
-            print(port)
+    def __init__(self):
+        self.video = cv2.VideoCapture(0)
 
     def record(self):
         while True:
-            for index in range(0, len(self.video)):
-                ret, frame = self.video[index].read()
+            ret, frame = self.video.read()
+            if ret:
+                image = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
+                image = cv2.flip(image, 1)
+                cv2.imshow('frame', image)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+        self.video.release()
+        cv2.destroyAllWindows()
 
 
 def main():
-    pass
+    video = VideoStream()
+    video.record()
 
 
 def save_sound():

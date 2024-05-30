@@ -23,6 +23,8 @@ def define_devices():
 
 def start():
     cams, mics = define_devices()
+    print(cams)
+    print(mics)
     app = QApplication(sys.argv)
     main_window = StartWindow(cameras=cams, microphones=mics)
     main_window.show()

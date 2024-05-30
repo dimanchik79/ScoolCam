@@ -103,7 +103,7 @@ background-color: rgb(255, 253, 225);</string>
      </size>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="auditory_line">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -116,7 +116,7 @@ background-color: rgb(255, 253, 225);</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
+   <widget class="QPushButton" name="final_2">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -190,7 +190,7 @@ background-color: rgb(234, 234, 234)</string>
      <string>Служебная консоль:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="path_line">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -274,7 +274,7 @@ background-color: rgb(234, 234, 234)</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="path_select">
     <property name="geometry">
      <rect>
       <x>1030</x>
@@ -319,7 +319,7 @@ background-color: rgb(234, 234, 234)</string>
      <string>Выбирите источник звука для записи</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_3">
+   <widget class="QLineEdit" name="mic_line">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -332,7 +332,7 @@ background-color: rgb(234, 234, 234)</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_11">
+   <widget class="QPushButton" name="mic_select">
     <property name="geometry">
      <rect>
       <x>1030</x>
@@ -361,7 +361,7 @@ background-color: rgb(234, 234, 234)</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_12">
+   <widget class="QPushButton" name="find_cams">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -486,7 +486,7 @@ border-radius: 25px;
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_13">
+   <widget class="QPushButton" name="record">
     <property name="geometry">
      <rect>
       <x>550</x>
@@ -499,7 +499,7 @@ border-radius: 25px;
      <string notr="true">background-color: rgb(85, 255, 127);</string>
     </property>
     <property name="text">
-     <string>ЗАПИСАТЬ ВИДЕО С АКТИВНЫХ КАМЕР</string>
+     <string>ЗАПИСАТЬ ВИДЕО С ВЫБРАННЫХ АКТИВНЫХ КАМЕР</string>
     </property>
     <property name="icon">
      <iconset>
