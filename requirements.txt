@@ -4,7 +4,6 @@ comtypes==1.4.2
 idna==3.7
 numpy==1.26.4
 opencv-python==4.9.0.80
-peewee==3.17.5
 PyAudio==0.2.14
 pygrabber==0.2
 PyQt5==5.15.10

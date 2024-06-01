@@ -32,6 +32,4 @@ def start():
 
 
 if __name__ == "__main__":
-    if not path.exists('DB/base.db'):
-        Configurations.create_table()
     start()
