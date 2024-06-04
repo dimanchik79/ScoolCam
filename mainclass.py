@@ -57,6 +57,7 @@ class StreamThread(QtCore.QThread):
 
     def run(self):
         cap = cv2.VideoCapture(0)
+
         while True:
             ret, frame = cap.read()
             if ret:
@@ -85,12 +86,14 @@ class StartWindow(QMainWindow):
         self.check_list = [0, 0, 0]
 
         self.cam_nam = [self.nam_1, self.nam_2, self.nam_3, self.nam_4, self.nam_5, self.nam_6]
+        self.cam = [self.cam_1, self.cam_2, self.cam_3, self.cam_4, self.cam_5, self.cam_6]
         self.full_scr = [self.full_1, self.full_2, self.full_3, self.full_4, self.full_5, self.full_6]
 
         self.mic_select.clicked.connect(self.add_microphone)
         self.path_select.clicked.connect(self.add_path)
 
         self.set_enabled_flag()
+
         self.set_msg("Идет подключение камер. Ожидайте...")
         self.define_cameras()
 
@@ -101,8 +104,9 @@ class StartWindow(QMainWindow):
         self.stream_thread = StreamThread()
 
     def init_connections(self):
-        self.stream_thread.change_pixmap.connect(self.cam_1.setPixmap)
-        self.stream_thread.start()
+        for cam in self.cam:
+            self.stream_thread.change_pixmap.connect(cam.setPixmap)
+            self.stream_thread.start()
 
     def define_cameras(self):
         if len(self.cameras) > 6:
@@ -136,7 +140,8 @@ class StartWindow(QMainWindow):
         self.stop.setEnabled(False)
 
     def add_path(self):
-        dir_path = QFileDialog.getExistingDirectory(None, 'Выбирете путь, куда будет вестись запись:', '')
+        dir_path = QFileDialog.getExistingDirectory(None,
+                                                    'Выбирете путь, куда будет будет записываться видеофайлы:', '')
         if not dir_path:
             return
         else:
