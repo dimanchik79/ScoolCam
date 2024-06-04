@@ -1,7 +1,9 @@
 from datetime import datetime
+
+import cv2
 from typing_extensions import Dict
 
-from PyQt5 import uic
+from PyQt5 import uic, QtCore, QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
 
@@ -50,9 +52,27 @@ class MicSelect(QDialog):
         self.microplace.addItems(microphones)
 
 
+class StreamThread(QtCore.QThread):
+    change_pixmap = QtCore.pyqtSignal(QtGui.QPixmap)
+
+    def run(self):
+        cap = cv2.VideoCapture(0)
+        while True:
+            ret, frame = cap.read()
+            if ret:
+                image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                flipped_image = cv2.flip(image, 1)
+                qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
+                                        QtGui.QImage.Format_RGB888)
+                pic = qt_image.scaled(281, 221, QtCore.Qt.KeepAspectRatio)
+                pixmap = QtGui.QPixmap.fromImage(pic)
+                self.change_pixmap.emit(pixmap)
+
+
 class StartWindow(QMainWindow):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
+        self.stream_thread = None
         uic.loadUi("GUI/main.ui", self)
         self.setFixedSize(982, 821)
 
@@ -72,6 +92,16 @@ class StartWindow(QMainWindow):
 
         self.set_enabled_flag()
         self.define_cameras()
+
+        self.init_properties()
+        self.init_connections()
+
+    def init_properties(self):
+        self.stream_thread = StreamThread()
+
+    def init_connections(self):
+        self.stream_thread.change_pixmap.connect(self.cam_1.setPixmap)
+        self.stream_thread.start()
 
     def define_cameras(self):
         if len(self.cameras) > 6:
