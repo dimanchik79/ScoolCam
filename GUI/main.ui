@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>982</width>
-    <height>782</height>
+    <height>821</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,397 +23,15 @@
   <property name="styleSheet">
    <string notr="true">background-color: rgb(85, 85, 127);</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>961</width>
-      <height>641</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 1px solid white;</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
-    </property>
-    <widget class="QLabel" name="cam_1">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_1">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>280</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-    <widget class="QLabel" name="cam_2">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>50</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="cam_3">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>50</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="cam_4">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>370</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="cam_5">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>370</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="cam_6">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>370</y>
-       <width>281</width>
-       <height>221</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 0, 0);
-color: white;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_1">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_2">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>10</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_3">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>10</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_4">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>330</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_5">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>330</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="nam_6">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>330</y>
-       <width>281</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);
-color: black;
-padding: 0 10px;</string>
-     </property>
-     <property name="text">
-      <string>---</string>
-     </property>
-     <property name="tristate">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_2">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>280</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_3">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>280</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_4">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>600</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_5">
-     <property name="geometry">
-      <rect>
-       <x>340</x>
-       <y>600</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="full_6">
-     <property name="geometry">
-      <rect>
-       <x>660</x>
-       <y>600</y>
-       <width>31</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
-     </property>
-    </widget>
-   </widget>
+  <widget class="QWidget" name="main">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>660</y>
+      <x>30</x>
+      <y>700</y>
       <width>321</width>
       <height>16</height>
      </rect>
@@ -422,12 +43,15 @@ padding: 0 10px;</string>
      <string>1. Выбирите микрофон для записи</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="mic">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>680</y>
-      <width>321</width>
+      <x>30</x>
+      <y>720</y>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
@@ -435,11 +59,11 @@ padding: 0 10px;</string>
      <string notr="true">color: white;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_7">
+   <widget class="QPushButton" name="mic_select">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>680</y>
+      <x>360</x>
+      <y>720</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -458,8 +82,8 @@ padding: 0 10px;</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>660</y>
+      <x>420</x>
+      <y>700</y>
       <width>321</width>
       <height>16</height>
      </rect>
@@ -471,12 +95,15 @@ padding: 0 10px;</string>
      <string>2. Выбирите путь, куда запишется видео</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="path">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>390</x>
-      <y>680</y>
-      <width>321</width>
+      <x>420</x>
+      <y>720</y>
+      <width>331</width>
       <height>31</height>
      </rect>
     </property>
@@ -484,11 +111,11 @@ padding: 0 10px;</string>
      <string notr="true">color: white;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_8">
+   <widget class="QPushButton" name="path_select">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>680</y>
+      <x>750</x>
+      <y>720</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -504,14 +131,17 @@ padding: 0 10px;</string>
       <normaloff>../IMG/open_table.ico</normaloff>../IMG/open_table.ico</iconset>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_9">
+   <widget class="QPushButton" name="record">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>670</y>
+      <x>810</x>
+      <y>710</y>
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Записать видео с выбранных камер</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -530,14 +160,17 @@ padding: 0 10px;</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_10">
+   <widget class="QPushButton" name="pause">
     <property name="geometry">
      <rect>
-      <x>880</x>
-      <y>670</y>
+      <x>860</x>
+      <y>710</y>
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Поставить на паузу запись</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -556,14 +189,17 @@ padding: 0 10px;</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_11">
+   <widget class="QPushButton" name="stop">
     <property name="geometry">
      <rect>
-      <x>930</x>
-      <y>670</y>
+      <x>910</x>
+      <y>710</y>
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Закочить запись</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -582,12 +218,12 @@ padding: 0 10px;</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="full_12">
+   <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>730</y>
-      <width>361</width>
+      <x>90</x>
+      <y>770</y>
+      <width>791</width>
       <height>41</height>
      </rect>
     </property>
@@ -595,31 +231,438 @@ padding: 0 10px;</string>
      <string notr="true">background-color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
-     <string>Смонтировать видео и выйти</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../IMG/edit.png</normaloff>../IMG/edit.png</iconset>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="full_13">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>730</y>
-      <width>371</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>Просто выйти из программы</string>
+     <string>ВЫЙТИ ИЗ ПРОГРАММЫ</string>
     </property>
     <property name="icon">
      <iconset>
       <normaloff>../IMG/exit.png</normaloff>../IMG/exit.png</iconset>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_5">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>340</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>340</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_5">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>380</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>20</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_3">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>60</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_3">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>20</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>380</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_1">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>60</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_6">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>380</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>60</y>
+      <width>281</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+    </property>
+    <property name="text">
+     <string>нет сигнала от камеры</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="nam_6">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>340</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+padding: 0 10px;</string>
+    </property>
+    <property name="text">
+     <string>---</string>
+    </property>
+    <property name="tristate">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_1">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>290</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>290</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_3">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>290</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>610</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_5">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>610</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="full_6">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>610</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../IMG/full.png</normaloff>../IMG/full.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>20</width>
+      <height>20</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>660</y>
+      <width>921</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black;
+color: red;
+background-color: rgb(0, 170, 255);
+border-radius: 5px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

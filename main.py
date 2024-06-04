@@ -1,11 +1,9 @@
 import sys
 import speech_recognition as sr
 
-from os import path
 from pygrabber.dshow_graph import FilterGraph
 
 from PyQt5.QtWidgets import QApplication
-from models import Configurations
 from mainclass import StartWindow
 
 
