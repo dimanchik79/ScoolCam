@@ -91,6 +91,7 @@ class StartWindow(QMainWindow):
         self.path_select.clicked.connect(self.add_path)
 
         self.set_enabled_flag()
+        self.set_msg("Идет подключение камер. Ожидайте...")
         self.define_cameras()
 
         self.init_properties()
@@ -140,3 +141,6 @@ class StartWindow(QMainWindow):
             return
         else:
             self.path.setText(dir_path)
+
+    def set_msg(self, msg: str):
+        self.msg_label.setText(msg)
