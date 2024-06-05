@@ -29,6 +29,9 @@
      <height>32</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
    </property>
@@ -95,7 +98,7 @@
     <string notr="true">color: rgb(255, 255, 127)</string>
    </property>
    <property name="text">
-    <string>[ 00:00:00 ]</string>
+    <string>[00:00:00]</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
@@ -110,8 +113,11 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="toolTip">
-    <string>Поставить на паузу запись</string>
+    <string>Воспроизвести звук</string>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -138,6 +144,9 @@
      <width>41</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="toolTip">
     <string>Закочить запись</string>
@@ -168,8 +177,11 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="toolTip">
-    <string>Записать видео с выбранных камер</string>
+    <string>Тестовая запись</string>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>

@@ -1,13 +1,17 @@
+import wave
+
 import cv2
 import threading
 
 from datetime import datetime
+
+import pyaudio
 from typing_extensions import Dict
 
 from PyQt5 import uic, QtCore, QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
-from config import MSG_RED, MSG_WHITE
+from config import MSG_WHITE, MSG_GREEN
 
 
 def current_date(mark: int) -> str:
@@ -44,14 +48,83 @@ class CamSelect(QDialog):
 class MicSelect(QDialog):
     def __init__(self, microphones: Dict):
         super().__init__()
+
+        self.audio_stream = None
+        self.audio_frames = None
+        self.format = None
+        self.frames_per_buffer = None
+        self.channels = None
+        self.rate = None
+        self.audio = None
+
         self.micro = microphones
         uic.loadUi("GUI/micselect.ui", self)
         self.setFixedSize(400, 300)
+        self.stream = True
+
+        self.stop.setEnabled(False)
+        self.play.setEnabled(False)
+
+        self.record.clicked.connect(self.record_audio)
+        self.stop.clicked.connect(self.stop_audio)
+
         self.add_item()
 
     def add_item(self):
         microphones = [mic for _, mic in self.micro.items()]
         self.microplace.addItems(microphones)
+
+    def set_time(self):
+        return
+
+    def get_id_microphone(self):
+        id_mic = 1
+
+        return id_mic
+
+    def record_audio(self):
+        # Параметры аудио
+        self.stop.setEnabled(True)
+        self.play.setEnabled(True)
+
+        self.audio = pyaudio.PyAudio()
+        self.rate = 44100
+        self.channels = 1
+        self.frames_per_buffer = 2048
+        self.format = pyaudio.paInt16
+        self.audio_frames = []
+        self.audio_stream = self.audio.open(format=self.format, channels=self.channels,
+                                            rate=self.rate, input=True,
+                                            input_device_index=self.get_id_microphone(),
+                                            frames_per_buffer=self.frames_per_buffer)
+        self.record.setEnabled(False)
+        for process in threading.enumerate():
+            if process.name.count("thread_record"):
+                return
+        else:
+            threading.Thread(target=self.thread_record, args=(), daemon=True).start()
+
+    def thread_record(self):
+        while True:
+            if self.stream:
+                data = self.audio_stream.read(self.frames_per_buffer)
+                self.audio_frames.append(data)
+                self.set_time()
+
+    def save_audio(self):
+        self.audio_stream.stop_stream()
+        self.audio_stream.close()
+        self.audio.terminate()
+
+        wave_file = wave.open("temp.wav", 'wb')
+        wave_file.setnchannels(self.channels)
+        wave_file.setsampwidth(self.audio.get_sample_size(self.format))
+        wave_file.setframerate(self.rate)
+        wave_file.writeframes(b''.join(self.audio_frames))
+        wave_file.close()
+
+    def stop_audio(self):
+        self.audio_stream = False
 
 
 class StartWindow(QMainWindow):
@@ -78,8 +151,9 @@ class StartWindow(QMainWindow):
         self.full_scr = [self.full_1, self.full_2, self.full_3, self.full_4, self.full_5, self.full_6]
 
         self.mic_select.clicked.connect(self.add_microphone)
-        self.path_select.clicked.connect(self.add_path)
+        self.path_select.clicked.connect(self.thread_add_path)
         self.button.clicked.connect(self.init_connections)
+        self.exit.clicked.connect(self.exit_program)
 
         self.set_enabled_flag()
         self.define_cameras()
@@ -98,9 +172,9 @@ class StartWindow(QMainWindow):
         if not self.stream:
             self.stream = True
             for index, name in self.active_cam.items():
-                self.set_message(f"Идет подключение {name}. Пожалуйста, ждите...", MSG_RED)
+                self.set_message(f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
                 self.capture.append(cv2.VideoCapture(index))
-            self.set_message("Камеры подключены. Отметьте галочкой нужные камеры и включите запись", MSG_WHITE)
+            self.set_message("Камеры подключены. Отметьте галочкой нужные камеры и включите запись", MSG_GREEN)
             self.record.setEnabled(True)
             self.stop.setEnabled(True)
             threading.Thread(target=self.thread_stream, args=(), daemon=True).start()
@@ -150,6 +224,13 @@ class StartWindow(QMainWindow):
         self.record.setEnabled(False)
         self.stop.setEnabled(False)
 
+    def thread_add_path(self):
+        for process in threading.enumerate():
+            if process.name.count("add_path"):
+                return
+        else:
+            threading.Thread(target=self.add_path, args=(), daemon=True).start()
+
     def add_path(self):
         dir_path = QFileDialog.getExistingDirectory(None,
                                                     'Выбирете путь, куда будет будет записываться видеофайлы:', '')
@@ -161,3 +242,11 @@ class StartWindow(QMainWindow):
     def set_message(self, msg, color_style):
         self.msg_label.setText(msg)
         self.msg_label.setStyleSheet(color_style)
+
+    def closeEvent(self, event) -> None:
+        """Метод вызывает метод выхода из программы"""
+        self.close()
+
+    def exit_program(self):
+        """Метод закрывает окно программы"""
+        self.close()
