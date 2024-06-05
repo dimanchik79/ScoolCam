@@ -1,3 +1,5 @@
+import os
+import time
 import wave
 
 import cv2
@@ -56,8 +58,9 @@ class MicSelect(QDialog):
         self.channels = None
         self.rate = None
         self.audio = None
+        self.id_mic = None
 
-        self.micro = microphones
+        self.microphones = microphones
         uic.loadUi("GUI/micselect.ui", self)
         self.setFixedSize(400, 300)
         self.stream = True
@@ -67,25 +70,29 @@ class MicSelect(QDialog):
 
         self.record.clicked.connect(self.record_audio)
         self.stop.clicked.connect(self.stop_audio)
+        self.microplace.currentTextChanged.connect(self.get_id_microphone)
 
         self.add_item()
 
     def add_item(self):
-        microphones = [mic for _, mic in self.micro.items()]
+        microphones = [mic for _, mic in self.microphones.items()]
         self.microplace.addItems(microphones)
 
     def set_time(self):
-        return
+        """Функция преобразует полученную длину песни в формат 00:00:00"""
+        time = time()
+        return f'[{hours:02d}:{minuts:02d}:{secs:02d}]'
 
     def get_id_microphone(self):
-        id_mic = 1
-
-        return id_mic
+        for key, word in self.microphones.items():
+            if word == self.microplace.currentText():
+                self.id_mic = key
+                break
+        print(self.id_mic)
 
     def record_audio(self):
         # Параметры аудио
         self.stop.setEnabled(True)
-        self.play.setEnabled(True)
 
         self.audio = pyaudio.PyAudio()
         self.rate = 44100
@@ -95,9 +102,11 @@ class MicSelect(QDialog):
         self.audio_frames = []
         self.audio_stream = self.audio.open(format=self.format, channels=self.channels,
                                             rate=self.rate, input=True,
-                                            input_device_index=self.get_id_microphone(),
+                                            input_device_index=self.id_mic,
                                             frames_per_buffer=self.frames_per_buffer)
         self.record.setEnabled(False)
+        self.play.setEnabled(False)
+
         for process in threading.enumerate():
             if process.name.count("thread_record"):
                 return
@@ -105,13 +114,11 @@ class MicSelect(QDialog):
             threading.Thread(target=self.thread_record, args=(), daemon=True).start()
 
     def thread_record(self):
-        while True:
-            if self.stream:
-                data = self.audio_stream.read(self.frames_per_buffer)
-                self.audio_frames.append(data)
-                self.set_time()
+        while self.stream:
+            data = self.audio_stream.read(self.frames_per_buffer)
+            self.audio_frames.append(data)
+            self.set_time()
 
-    def save_audio(self):
         self.audio_stream.stop_stream()
         self.audio_stream.close()
         self.audio.terminate()
@@ -122,9 +129,14 @@ class MicSelect(QDialog):
         wave_file.setframerate(self.rate)
         wave_file.writeframes(b''.join(self.audio_frames))
         wave_file.close()
+        self.record.setEnabled(True)
+        self.stop.setEnabled(False)
+        if os.path.exists("temp.wav"):
+            self.play.setEnabled(True)
+            self.stream = True
 
     def stop_audio(self):
-        self.audio_stream = False
+        self.stream = False
 
 
 class StartWindow(QMainWindow):
@@ -174,7 +186,7 @@ class StartWindow(QMainWindow):
             for index, name in self.active_cam.items():
                 self.set_message(f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
                 self.capture.append(cv2.VideoCapture(index))
-            self.set_message("Камеры подключены. Отметьте галочкой нужные камеры и включите запись", MSG_GREEN)
+            self.set_message("Камеры подключены. Отметьте галочкой нужные устройства и включите запись", MSG_GREEN)
             self.record.setEnabled(True)
             self.stop.setEnabled(True)
             threading.Thread(target=self.thread_stream, args=(), daemon=True).start()
@@ -214,8 +226,12 @@ class StartWindow(QMainWindow):
         dialog.show()
         dialog.exec_()
 
+        if os.path.exists("temp.wav"):
+            os.remove("temp.wav")
+
         if dialog.result() == 1:
             pass
+
 
     def set_enabled_flag(self):
         for index in range(6):

@@ -51,7 +51,7 @@
      <rect>
       <x>30</x>
       <y>760</y>
-      <width>331</width>
+      <width>301</width>
       <height>31</height>
      </rect>
     </property>
@@ -62,7 +62,7 @@
    <widget class="QPushButton" name="mic_select">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>330</x>
       <y>760</y>
       <width>31</width>
       <height>31</height>
@@ -85,7 +85,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>380</x>
       <y>740</y>
       <width>321</width>
       <height>16</height>
@@ -104,7 +104,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>380</x>
       <y>760</y>
       <width>331</width>
       <height>31</height>
@@ -117,7 +117,7 @@
    <widget class="QPushButton" name="path_select">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>710</x>
       <y>760</y>
       <width>31</width>
       <height>31</height>
@@ -711,6 +711,30 @@ border-radius: 5px;</string>
     <property name="icon">
      <iconset>
       <normaloff>../IMG/edit.png</normaloff>../IMG/edit.png</iconset>
+    </property>
+   </widget>
+   <widget class="QLabel" name="time">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>750</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(255, 255, 127)</string>
+    </property>
+    <property name="text">
+     <string>[00:00:00]</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
