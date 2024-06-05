@@ -1,6 +1,7 @@
-from datetime import datetime
-
 import cv2
+import threading
+
+from datetime import datetime
 from typing_extensions import Dict
 
 from PyQt5 import uic, QtCore, QtGui
@@ -55,12 +56,19 @@ class MicSelect(QDialog):
 class StreamThread(QtCore.QThread):
     change_pixmap = QtCore.pyqtSignal(QtGui.QPixmap)
 
+    def __init__(self, msg_label, index_cam, cam_name, count):
+        super().__init__()
+        self.msg_label = msg_label
+        self.index_cam = index_cam
+        self.cam_name = cam_name
+        self.count = count
+
     def run(self):
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(self.index_cam)
 
         while True:
-            ret, frame = cap.read()
-            if ret:
+            correct, frame = cap.read()
+            if correct:
                 image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 flipped_image = cv2.flip(image, 1)
                 qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
@@ -91,21 +99,18 @@ class StartWindow(QMainWindow):
 
         self.mic_select.clicked.connect(self.add_microphone)
         self.path_select.clicked.connect(self.add_path)
+        self.button.clicked.connect(self.init_connections)
 
         self.set_enabled_flag()
-
-        self.set_msg("Идет подключение камер. Ожидайте...")
         self.define_cameras()
 
-        self.init_properties()
-        self.init_connections()
-
-    def init_properties(self):
-        self.stream_thread = StreamThread()
-
+    @QtCore.pyqtSlot(bool)
     def init_connections(self):
-        for cam in self.cam:
-            self.stream_thread.change_pixmap.connect(cam.setPixmap)
+        count = 0
+        for index, cam_name in self.active_cam.items():
+            self.stream_thread = StreamThread(msg_label=self.msg_label, index_cam=index, cam_name=cam_name, count=count)
+            self.stream_thread.change_pixmap.connect(self.cam[count].setPixmap)
+            count += 1
             self.stream_thread.start()
 
     def define_cameras(self):
@@ -136,7 +141,6 @@ class StartWindow(QMainWindow):
             self.cam_nam[index].setEnabled(False)
             self.full_scr[index].setEnabled(False)
         self.record.setEnabled(False)
-        self.pause.setEnabled(False)
         self.stop.setEnabled(False)
 
     def add_path(self):
@@ -146,6 +150,3 @@ class StartWindow(QMainWindow):
             return
         else:
             self.path.setText(dir_path)
-
-    def set_msg(self, msg: str):
-        self.msg_label.setText(msg)
