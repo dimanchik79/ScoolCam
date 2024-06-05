@@ -7,6 +7,7 @@ from typing_extensions import Dict
 from PyQt5 import uic, QtCore, QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
+from config import MSG_RED, MSG_WHITE
 
 
 def current_date(mark: int) -> str:
@@ -53,37 +54,12 @@ class MicSelect(QDialog):
         self.microplace.addItems(microphones)
 
 
-class StreamThread(QtCore.QThread):
-    change_pixmap = QtCore.pyqtSignal(QtGui.QPixmap)
-
-    def __init__(self, msg_label, index_cam, cam_name, count):
-        super().__init__()
-        self.msg_label = msg_label
-        self.index_cam = index_cam
-        self.cam_name = cam_name
-        self.count = count
-
-    def run(self):
-        cap = cv2.VideoCapture(self.index_cam)
-
-        while True:
-            correct, frame = cap.read()
-            if correct:
-                image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                flipped_image = cv2.flip(image, 1)
-                qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
-                                        QtGui.QImage.Format_RGB888)
-                pic = qt_image.scaled(281, 221, QtCore.Qt.KeepAspectRatio)
-                pixmap = QtGui.QPixmap.fromImage(pic)
-                self.change_pixmap.emit(pixmap)
-
-
 class StartWindow(QMainWindow):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
         self.stream_thread = None
         uic.loadUi("GUI/main.ui", self)
-        self.setFixedSize(982, 821)
+        self.setFixedSize(982, 864)
 
         # self.cameras = cameras
         self.cameras = cameras
@@ -92,9 +68,13 @@ class StartWindow(QMainWindow):
 
         self.microphones = microphones
         self.check_list = [0, 0, 0]
+        self.capture = []
 
-        self.cam_nam = [self.nam_1, self.nam_2, self.nam_3, self.nam_4, self.nam_5, self.nam_6]
-        self.cam = [self.cam_1, self.cam_2, self.cam_3, self.cam_4, self.cam_5, self.cam_6]
+        self.initial = False
+        self.stream = False
+
+        self.cameras_name = [self.nam_1, self.nam_2, self.nam_3, self.nam_4, self.nam_5, self.nam_6]
+        self.cameras_label = [self.cam_1, self.cam_2, self.cam_3, self.cam_4, self.cam_5, self.cam_6]
         self.full_scr = [self.full_1, self.full_2, self.full_3, self.full_4, self.full_5, self.full_6]
 
         self.mic_select.clicked.connect(self.add_microphone)
@@ -104,14 +84,41 @@ class StartWindow(QMainWindow):
         self.set_enabled_flag()
         self.define_cameras()
 
-    @QtCore.pyqtSlot(bool)
     def init_connections(self):
-        count = 0
-        for index, cam_name in self.active_cam.items():
-            self.stream_thread = StreamThread(msg_label=self.msg_label, index_cam=index, cam_name=cam_name, count=count)
-            self.stream_thread.change_pixmap.connect(self.cam[count].setPixmap)
-            count += 1
-            self.stream_thread.start()
+        if not self.initial:
+            self.initial = True
+            for count in range(len(self.active_cam)):
+                self.cameras_name[count].setText(self.active_cam[count])
+            threading.Thread(target=self.thread_camera_initial, args=(), daemon=True).start()
+            for count in range(len(self.active_cam)):
+                self.cameras_name[count].setEnabled(True)
+                self.full_scr[count].setEnabled(True)
+
+    def thread_camera_initial(self):
+        if not self.stream:
+            self.stream = True
+            for index, name in self.active_cam.items():
+                self.set_message(f"Идет подключение {name}. Пожалуйста, ждите...", MSG_RED)
+                self.capture.append(cv2.VideoCapture(index))
+            self.set_message("Камеры подключены. Отметьте галочкой нужные камеры и включите запись", MSG_WHITE)
+            self.record.setEnabled(True)
+            self.stop.setEnabled(True)
+            threading.Thread(target=self.thread_stream, args=(), daemon=True).start()
+
+    def thread_stream(self):
+        while True:
+            count = 0
+            for capture in self.capture:
+                correct_frame, frame = capture.read()
+                if correct_frame:
+                    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    flipped_image = cv2.flip(image, 1)
+                    qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
+                                            QtGui.QImage.Format_RGB888)
+                    pic = qt_image.scaled(281, 221, QtCore.Qt.KeepAspectRatio)
+                    pixmap = QtGui.QPixmap.fromImage(pic)
+                    self.cameras_label[count].setPixmap(pixmap)
+                    count += 1
 
     def define_cameras(self):
         if len(self.cameras) > 6:
@@ -138,7 +145,7 @@ class StartWindow(QMainWindow):
 
     def set_enabled_flag(self):
         for index in range(6):
-            self.cam_nam[index].setEnabled(False)
+            self.cameras_name[index].setEnabled(False)
             self.full_scr[index].setEnabled(False)
         self.record.setEnabled(False)
         self.stop.setEnabled(False)
@@ -150,3 +157,7 @@ class StartWindow(QMainWindow):
             return
         else:
             self.path.setText(dir_path)
+
+    def set_message(self, msg, color_style):
+        self.msg_label.setText(msg)
+        self.msg_label.setStyleSheet(color_style)
