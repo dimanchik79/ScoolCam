@@ -1,4 +1,6 @@
 import sys
+import threading
+
 import speech_recognition as sr
 
 from pygrabber.dshow_graph import FilterGraph

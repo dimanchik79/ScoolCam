@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import wave
 
@@ -31,25 +32,9 @@ def current_date(mark: int) -> str:
         return str(datetime.now())
 
 
-class CamSelect(QDialog):
-    def __init__(self, cameras: Dict):
-        super().__init__()
-        self.cameras = cameras
-        uic.loadUi("GUI/camselect.ui", self)
-        self.setFixedSize(400, 552)
-        self.add_item()
-
-    def add_item(self):
-        for key, cam in self.cameras.items():
-            item = QListWidgetItem(cam)
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Unchecked)
-            self.camplace.addItem(item)
-
-
-class MicSelect(QDialog):
-    def __init__(self, microphones: Dict):
-        super().__init__()
+class Mixins:
+    def __init__(self, *args, **kwargs):
+        self.msg_label = None
 
         self.audio_stream = None
         self.audio_frames = None
@@ -59,36 +44,11 @@ class MicSelect(QDialog):
         self.rate = None
         self.audio = None
         self.id_mic = None
-
-        self.microphones = microphones
-        uic.loadUi("GUI/micselect.ui", self)
-        self.setFixedSize(400, 300)
         self.stream = True
-
-        self.stop.setEnabled(False)
-        self.play.setEnabled(False)
-
-        self.record.clicked.connect(self.record_audio)
-        self.stop.clicked.connect(self.stop_audio)
-        self.microplace.currentTextChanged.connect(self.get_id_microphone)
-
-        self.add_item()
-
-    def add_item(self):
-        microphones = [mic for _, mic in self.microphones.items()]
-        self.microplace.addItems(microphones)
-
-    def set_time(self):
-        """Функция преобразует полученную длину песни в формат 00:00:00"""
-        time = time()
-        return f'[{hours:02d}:{minuts:02d}:{secs:02d}]'
-
-    def get_id_microphone(self):
-        for key, word in self.microphones.items():
-            if word == self.microplace.currentText():
-                self.id_mic = key
-                break
-        print(self.id_mic)
+   
+    def set_message(self, msg, color_style):
+        self.msg_label.setText(msg)
+        self.msg_label.setStyleSheet(color_style)
 
     def record_audio(self):
         # Параметры аудио
@@ -135,11 +95,58 @@ class MicSelect(QDialog):
             self.play.setEnabled(True)
             self.stream = True
 
+    def set_time(self):
+        pass
+
+
+class CamSelect(QDialog):
+    def __init__(self, cameras: Dict):
+        super().__init__()
+        self.cameras = cameras
+        uic.loadUi("GUI/camselect.ui", self)
+        self.setFixedSize(400, 552)
+        self.add_item()
+
+    def add_item(self):
+        for key, cam in self.cameras.items():
+            item = QListWidgetItem(cam)
+            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+            item.setCheckState(Qt.Unchecked)
+            self.camplace.addItem(item)
+
+
+class MicSelect(QDialog, Mixins):
+    def __init__(self, microphones: Dict):
+        super().__init__()
+
+        self.microphones = microphones
+        uic.loadUi("GUI/micselect.ui", self)
+        self.setFixedSize(400, 300)
+
+        self.stop.setEnabled(False)
+        self.play.setEnabled(False)
+
+        self.record.clicked.connect(self.record_audio)
+        self.stop.clicked.connect(self.stop_audio)
+        self.microplace.currentTextChanged.connect(self.get_id_microphone)
+
+        self.add_item()
+
+    def add_item(self):
+        microphones = [mic for _, mic in self.microphones.items()]
+        self.microplace.addItems(microphones)
+
+    def get_id_microphone(self):
+        for key, word in self.microphones.items():
+            if word == self.microplace.currentText():
+                self.id_mic = key
+                break
+
     def stop_audio(self):
         self.stream = False
 
 
-class StartWindow(QMainWindow):
+class StartWindow(QMainWindow, Mixins):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
         self.stream_thread = None
@@ -232,7 +239,6 @@ class StartWindow(QMainWindow):
         if dialog.result() == 1:
             pass
 
-
     def set_enabled_flag(self):
         for index in range(6):
             self.cameras_name[index].setEnabled(False)
@@ -249,20 +255,18 @@ class StartWindow(QMainWindow):
 
     def add_path(self):
         dir_path = QFileDialog.getExistingDirectory(None,
-                                                    'Выбирете путь, куда будет будет записываться видеофайлы:', '')
+                                                    'Выбирете путь, куда будет будет записываться видеофайлы:',
+                                                    '')
         if not dir_path:
             return
         else:
             self.path.setText(dir_path)
 
-    def set_message(self, msg, color_style):
-        self.msg_label.setText(msg)
-        self.msg_label.setStyleSheet(color_style)
-
     def closeEvent(self, event) -> None:
-        """Метод вызывает метод выхода из программы"""
-        self.close()
-
-    def exit_program(self):
         """Метод закрывает окно программы"""
-        self.close()
+        self.exit_program()
+
+    @staticmethod
+    def exit_program():
+        """Метод закрывает окно программы"""
+        sys.exit()
