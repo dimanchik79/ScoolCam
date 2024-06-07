@@ -1,19 +1,18 @@
 import os
 import sys
+import threading
 import wave
+import cv2
 import pyaudio
 
-import cv2
-import threading
-
 from datetime import datetime
-
-
-from typing_extensions import Dict
+from playsound import playsound
 
 from PyQt5 import uic, QtCore, QtGui
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog, QLabel
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
+from typing_extensions import Dict
+
 from config import MSG_WHITE, MSG_GREEN
 
 
@@ -91,13 +90,16 @@ class Mixins:
         wave_file.close()
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
-        if os.path.exists("temp.wav"):
+        if os.path.exists(f"self.file_name"):
             self.play.setEnabled(True)
             self.stream = True
 
     def set_time(self):
         # TODO дописать течение времени
         pass
+
+    def play_audio(self):
+        playsound(f"{self.file_name}")
 
 
 class CamSelect(QDialog):
@@ -132,6 +134,7 @@ class MicSelect(QDialog, Mixins):
         self.record.clicked.connect(self.record_audio)
         self.stop.clicked.connect(self.stop_audio)
         self.microplace.currentTextChanged.connect(self.get_id_microphone)
+        self.play.clicked.connect(self.wav_play)
 
         self.add_item()
 
@@ -146,8 +149,11 @@ class MicSelect(QDialog, Mixins):
                 break
 
     def stop_audio(self):
+        self.play.setEnabled(True)
         self.stream = False
 
+    def wav_play(self):
+        threading.Thread(target=self.play_audio, args=(), daemon=True).start()
 
 class PreviewCam(QDialog):
     def __init__(self):
