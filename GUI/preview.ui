@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Просмотр</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../IMG/icon.png</normaloff>../IMG/icon.png</iconset>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>730</y>
+     <width>101</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Close</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="preview">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>1001</width>
+     <height>661</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);
+color: white;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="screen">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>690</y>
+     <width>241</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="toolTip">
+    <string>Сделать снимок экрана</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#scrn_1 {
+	
+	background-color: rgb(255, 255, 255);
+}
+
+#scrn_1::hover {
+	background-color: rgb(170, 255, 255);
+}</string>
+   </property>
+   <property name="text">
+    <string>Сделать снимок экрана</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../IMG/screen.png</normaloff>../IMG/screen.png</iconset>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="sound">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>690</y>
+     <width>241</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="toolTip">
+    <string>Сделать снимок экрана</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#scrn_1 {
+	
+	background-color: rgb(255, 255, 255);
+}
+
+#scrn_1::hover {
+	background-color: rgb(170, 255, 255);
+}</string>
+   </property>
+   <property name="text">
+    <string>Прослушать звук с камеры</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>../IMG/sound-on.png</normaloff>../IMG/sound-on.png</iconset>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

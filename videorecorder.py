@@ -30,8 +30,8 @@ class VideoRecorder:
 
     def video_save(self):
         self.cap.set(cv2.CAP_PROP_FPS, self.fps)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+        # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
 
         while True:
             ret, frame = self.cap.read()

@@ -1,19 +1,19 @@
 import os
 import sys
-import time
 import wave
+import pyaudio
 
 import cv2
 import threading
 
 from datetime import datetime
 
-import pyaudio
+
 from typing_extensions import Dict
 
 from PyQt5 import uic, QtCore, QtGui
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog, QLabel
 from config import MSG_WHITE, MSG_GREEN
 
 
@@ -34,8 +34,8 @@ def current_date(mark: int) -> str:
 
 class Mixins:
     def __init__(self, *args, **kwargs):
+        self.file_name = None
         self.msg_label = None
-
         self.audio_stream = None
         self.audio_frames = None
         self.format = None
@@ -45,7 +45,7 @@ class Mixins:
         self.audio = None
         self.id_mic = None
         self.stream = True
-   
+
     def set_message(self, msg, color_style):
         self.msg_label.setText(msg)
         self.msg_label.setStyleSheet(color_style)
@@ -83,7 +83,7 @@ class Mixins:
         self.audio_stream.close()
         self.audio.terminate()
 
-        wave_file = wave.open("temp.wav", 'wb')
+        wave_file = wave.open(f"{self.file_name}", 'wb')
         wave_file.setnchannels(self.channels)
         wave_file.setsampwidth(self.audio.get_sample_size(self.format))
         wave_file.setframerate(self.rate)
@@ -96,6 +96,7 @@ class Mixins:
             self.stream = True
 
     def set_time(self):
+        # TODO дописать течение времени
         pass
 
 
@@ -126,6 +127,8 @@ class MicSelect(QDialog, Mixins):
         self.stop.setEnabled(False)
         self.play.setEnabled(False)
 
+        self.file_name = "temp.wav"
+
         self.record.clicked.connect(self.record_audio)
         self.stop.clicked.connect(self.stop_audio)
         self.microplace.currentTextChanged.connect(self.get_id_microphone)
@@ -146,12 +149,22 @@ class MicSelect(QDialog, Mixins):
         self.stream = False
 
 
+class PreviewCam(QDialog):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi("GUI/preview.ui", self)
+        self.setFixedSize(1024, 780)
+
+
 class StartWindow(QMainWindow, Mixins):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
+        self.preview_dialog = None
         self.stream_thread = None
+        self.index_camera = None
+
         uic.loadUi("GUI/main.ui", self)
-        self.setFixedSize(982, 864)
+        self.setFixedSize(982, 855)
 
         # self.cameras = cameras
         self.cameras = cameras
@@ -159,15 +172,18 @@ class StartWindow(QMainWindow, Mixins):
             self.active_cam = self.cameras.copy()
 
         self.microphones = microphones
-        self.check_list = [0, 0, 0]
         self.capture = []
 
         self.initial = False
         self.stream = False
+        self.preview = False
+        self.temp = {'prev_1': 0, 'prev_2': 1, 'prev_3': 2, 'prev_4': 3, 'prev_5': 4, 'prev_6': 5}
+        self.main_objects = {'camera_name': (self.nam_1, self.nam_2, self.nam_3, self.nam_4, self.nam_5, self.nam_6),
+                             'camera': (self.cam_1, self.cam_2, self.cam_3, self.cam_4, self.cam_5, self.cam_6),
+                             'preview': (self.prev_1, self.prev_2, self.prev_3, self.prev_4, self.prev_5, self.prev_6)}
 
-        self.cameras_name = [self.nam_1, self.nam_2, self.nam_3, self.nam_4, self.nam_5, self.nam_6]
-        self.cameras_label = [self.cam_1, self.cam_2, self.cam_3, self.cam_4, self.cam_5, self.cam_6]
-        self.full_scr = [self.full_1, self.full_2, self.full_3, self.full_4, self.full_5, self.full_6]
+        for camera in self.main_objects['preview']:
+            camera.clicked.connect(self.set_cameras_preview)
 
         self.mic_select.clicked.connect(self.add_microphone)
         self.path_select.clicked.connect(self.thread_add_path)
@@ -181,11 +197,11 @@ class StartWindow(QMainWindow, Mixins):
         if not self.initial:
             self.initial = True
             for count in range(len(self.active_cam)):
-                self.cameras_name[count].setText(self.active_cam[count])
+                self.main_objects['camera_name'][count].setText(self.active_cam[count])
             threading.Thread(target=self.thread_camera_initial, args=(), daemon=True).start()
             for count in range(len(self.active_cam)):
-                self.cameras_name[count].setEnabled(True)
-                self.full_scr[count].setEnabled(True)
+                self.main_objects['camera_name'][count].setEnabled(True)
+                self.main_objects['preview'][count].setEnabled(True)
 
     def thread_camera_initial(self):
         if not self.stream:
@@ -193,6 +209,10 @@ class StartWindow(QMainWindow, Mixins):
             for index, name in self.active_cam.items():
                 self.set_message(f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
                 self.capture.append(cv2.VideoCapture(index))
+                # cv2.VideoCapture(index).set(cv2.CAP_PROP_FPS, 25)
+                # cv2.VideoCapture(index).set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
+                # cv2.VideoCapture(index).set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
             self.set_message("Камеры подключены. Отметьте галочкой нужные устройства и включите запись", MSG_GREEN)
             self.record.setEnabled(True)
             self.stop.setEnabled(True)
@@ -201,17 +221,28 @@ class StartWindow(QMainWindow, Mixins):
     def thread_stream(self):
         while True:
             count = 0
-            for capture in self.capture:
-                correct_frame, frame = capture.read()
+            if self.preview:
+                correct_frame, frame = self.capture[self.index_camera].read()
                 if correct_frame:
                     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     flipped_image = cv2.flip(image, 1)
                     qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                             QtGui.QImage.Format_RGB888)
-                    pic = qt_image.scaled(281, 221, QtCore.Qt.KeepAspectRatio)
+                    pic = qt_image.scaled(1001, 661, QtCore.Qt.KeepAspectRatio)
                     pixmap = QtGui.QPixmap.fromImage(pic)
-                    self.cameras_label[count].setPixmap(pixmap)
-                    count += 1
+                    self.preview_dialog.preview.setPixmap(pixmap)
+            else:
+                for capture in self.capture:
+                    correct_frame, frame = capture.read()
+                    if correct_frame:
+                        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                        flipped_image = cv2.flip(image, 1)
+                        qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
+                                                QtGui.QImage.Format_RGB888)
+                        pic = qt_image.scaled(281, 231, QtCore.Qt.KeepAspectRatio)
+                        pixmap = QtGui.QPixmap.fromImage(pic)
+                        self.main_objects['camera'][count].setPixmap(pixmap)
+                        count += 1
 
     def define_cameras(self):
         if len(self.cameras) > 6:
@@ -241,8 +272,9 @@ class StartWindow(QMainWindow, Mixins):
 
     def set_enabled_flag(self):
         for index in range(6):
-            self.cameras_name[index].setEnabled(False)
-            self.full_scr[index].setEnabled(False)
+            self.main_objects['camera_name'][index].setEnabled(False)
+            self.main_objects['preview'][index].setEnabled(False)
+
         self.record.setEnabled(False)
         self.stop.setEnabled(False)
 
@@ -261,6 +293,22 @@ class StartWindow(QMainWindow, Mixins):
             return
         else:
             self.path.setText(dir_path)
+
+    def set_cameras_preview(self):
+        index = self.temp[self.sender().objectName()]
+        camera_name = self.active_cam[index]
+        for key, word in self.active_cam.items():
+            if word == camera_name:
+                self.index_camera = key
+                break
+        if not self.preview:
+            self.preview = True
+            self.preview_dialog = PreviewCam()
+            self.preview_dialog.show()
+            self.preview_dialog.exec_()
+            if self.preview_dialog.result() == 0:
+                self.preview = False
+            return
 
     def closeEvent(self, event) -> None:
         """Метод закрывает окно программы"""
