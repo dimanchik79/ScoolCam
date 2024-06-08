@@ -1,6 +1,7 @@
 import os
 import sys
 import threading
+import time
 import wave
 import cv2
 import pyaudio
@@ -33,6 +34,10 @@ def current_date(mark: int) -> str:
 
 class Mixins:
     def __init__(self, *args, **kwargs):
+        self.hour = None
+        self.minute = None
+        self.second = None
+        self.record_wav = False
         self.file_name = None
         self.msg_label = None
         self.audio_stream = None
@@ -50,13 +55,11 @@ class Mixins:
         self.msg_label.setStyleSheet(color_style)
 
     def record_audio(self):
-        # Параметры аудио
         self.stop.setEnabled(True)
-
         self.audio = pyaudio.PyAudio()
         self.rate = 44100
         self.channels = 1
-        self.frames_per_buffer = 2048
+        self.frames_per_buffer = 1024
         self.format = pyaudio.paInt16
         self.audio_frames = []
         self.audio_stream = self.audio.open(format=self.format, channels=self.channels,
@@ -65,18 +68,14 @@ class Mixins:
                                             frames_per_buffer=self.frames_per_buffer)
         self.record.setEnabled(False)
         self.play.setEnabled(False)
-
-        for process in threading.enumerate():
-            if process.name.count("thread_record"):
-                return
-        else:
-            threading.Thread(target=self.thread_record, args=(), daemon=True).start()
+        self.set_time()
+        threading.Thread(target=self.thread_record, args=(), daemon=True).start()
+        threading.Thread(target=self.run_time, args=(), daemon=True).start()
 
     def thread_record(self):
         while self.stream:
             data = self.audio_stream.read(self.frames_per_buffer)
             self.audio_frames.append(data)
-            self.set_time()
 
         self.audio_stream.stop_stream()
         self.audio_stream.close()
@@ -88,18 +87,35 @@ class Mixins:
         wave_file.setframerate(self.rate)
         wave_file.writeframes(b''.join(self.audio_frames))
         wave_file.close()
+
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
-        if os.path.exists(f"self.file_name"):
+        if os.path.exists(f"{self.file_name}"):
             self.play.setEnabled(True)
             self.stream = True
 
-    def set_time(self):
-        # TODO дописать течение времени
-        pass
-
     def play_audio(self):
         playsound(f"{self.file_name}")
+
+    def set_time(self):
+        self.record_wav = True
+        self.second = 0
+        self.minute = 0
+        self.hour = 0
+
+    def run_time(self):
+        while self.record_wav:
+            if self.second != 59:
+                self.second += 1
+            else:
+                self.second = 0
+                if self.minute != 59:
+                    self.minute += 1
+                else:
+                    self.minute = 0
+                    self.hour += 1
+            time.sleep(1)
+            self.time.setText(f'[{self.hour:02d}:{self.minute:02d}:{self.second:02d}]')
 
 
 class CamSelect(QDialog):
@@ -149,11 +165,12 @@ class MicSelect(QDialog, Mixins):
                 break
 
     def stop_audio(self):
-        self.play.setEnabled(True)
         self.stream = False
+        self.record_wav = False
 
     def wav_play(self):
         threading.Thread(target=self.play_audio, args=(), daemon=True).start()
+
 
 class PreviewCam(QDialog):
     def __init__(self):
@@ -217,7 +234,7 @@ class StartWindow(QMainWindow, Mixins):
                 self.capture.append(cv2.VideoCapture(index))
                 # cv2.VideoCapture(index).set(cv2.CAP_PROP_FPS, 25)
                 # cv2.VideoCapture(index).set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
-                # cv2.VideoCapture(index).set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+                # cv2.VideoCapture(index).set(cv2.CAP_PROP_FRAME_HEIGHT, 728)
 
             self.set_message("Камеры подключены. Отметьте галочкой нужные устройства и включите запись", MSG_GREEN)
             self.record.setEnabled(True)

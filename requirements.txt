@@ -3,7 +3,7 @@ charset-normalizer==3.3.2
 comtypes==1.4.2
 idna==3.7
 numpy==1.26.4
-opencv-python==4.9.0.80
+opencv-python==4.10.0.82
 PyAudio==0.2.14
 pygrabber==0.2
 PyQt5==5.15.10
@@ -12,3 +12,4 @@ PyQt5-sip==12.13.0
 SpeechRecognition==3.10.4
 typing_extensions==4.12.0
 urllib3==2.2.1
+playsound~=1.3.0
