@@ -149,7 +149,7 @@
     <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="toolTip">
-    <string>Закочить запись</string>
+    <string>Закончить запись</string>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>

@@ -7,7 +7,6 @@ import cv2
 import pyaudio
 
 from datetime import datetime
-from playsound import playsound
 
 from PyQt5 import uic, QtCore, QtGui
 from PyQt5.QtCore import Qt
@@ -15,6 +14,7 @@ from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
 from typing_extensions import Dict
 
 from config import MSG_WHITE, MSG_GREEN
+from mixins import Mixins
 
 
 def current_date(mark: int) -> str:
@@ -30,92 +30,6 @@ def current_date(mark: int) -> str:
         return str(datetime.now().strftime('%d%m%y_%H%M%S'))
     else:
         return str(datetime.now())
-
-
-class Mixins:
-    def __init__(self, *args, **kwargs):
-        self.hour = None
-        self.minute = None
-        self.second = None
-        self.record_wav = False
-        self.file_name = None
-        self.msg_label = None
-        self.audio_stream = None
-        self.audio_frames = None
-        self.format = None
-        self.frames_per_buffer = None
-        self.channels = None
-        self.rate = None
-        self.audio = None
-        self.id_mic = None
-        self.stream = True
-
-    def set_message(self, msg, color_style):
-        self.msg_label.setText(msg)
-        self.msg_label.setStyleSheet(color_style)
-
-    def record_audio(self):
-        self.stop.setEnabled(True)
-        self.audio = pyaudio.PyAudio()
-        self.rate = 44100
-        self.channels = 1
-        self.frames_per_buffer = 1024
-        self.format = pyaudio.paInt16
-        self.audio_frames = []
-        self.audio_stream = self.audio.open(format=self.format, channels=self.channels,
-                                            rate=self.rate, input=True,
-                                            input_device_index=self.id_mic,
-                                            frames_per_buffer=self.frames_per_buffer)
-        self.record.setEnabled(False)
-        self.play.setEnabled(False)
-        self.set_time()
-        threading.Thread(target=self.thread_record, args=(), daemon=True).start()
-        threading.Thread(target=self.run_time, args=(), daemon=True).start()
-
-    def thread_record(self):
-        while self.stream:
-            data = self.audio_stream.read(self.frames_per_buffer)
-            self.audio_frames.append(data)
-
-        self.audio_stream.stop_stream()
-        self.audio_stream.close()
-        self.audio.terminate()
-
-        wave_file = wave.open(f"{self.file_name}", 'wb')
-        wave_file.setnchannels(self.channels)
-        wave_file.setsampwidth(self.audio.get_sample_size(self.format))
-        wave_file.setframerate(self.rate)
-        wave_file.writeframes(b''.join(self.audio_frames))
-        wave_file.close()
-
-        self.record.setEnabled(True)
-        self.stop.setEnabled(False)
-        if os.path.exists(f"{self.file_name}"):
-            self.play.setEnabled(True)
-            self.stream = True
-
-    def play_audio(self):
-        playsound(f"{self.file_name}")
-
-    def set_time(self):
-        self.record_wav = True
-        self.second = 0
-        self.minute = 0
-        self.hour = 0
-
-    def run_time(self):
-        while self.record_wav:
-            if self.second != 59:
-                self.second += 1
-            else:
-                self.second = 0
-                if self.minute != 59:
-                    self.minute += 1
-                else:
-                    self.minute = 0
-                    self.hour += 1
-            time.sleep(1)
-            self.time.setText(f'[{self.hour:02d}:{self.minute:02d}:{self.second:02d}]')
 
 
 class CamSelect(QDialog):
@@ -165,11 +79,22 @@ class MicSelect(QDialog, Mixins):
                 break
 
     def stop_audio(self):
-        self.stream = False
-        self.record_wav = False
+        self.time_stream = False
+        self.record_stream = False
+        self.play_stream = False
+        self.play.setEnabled(True)
 
     def wav_play(self):
+        self.play.setEnabled(False)
+        self.stop.setEnabled(True)
+        self.record.setEnabled(False)
+
+        self.play_stream = True
+        self.play_stream = True
+        self.set_time()
+        self.set_play_audio()
         threading.Thread(target=self.play_audio, args=(), daemon=True).start()
+        threading.Thread(target=self.run_time, args=(), daemon=True).start()
 
 
 class PreviewCam(QDialog):
@@ -185,6 +110,7 @@ class StartWindow(QMainWindow, Mixins):
         self.preview_dialog = None
         self.stream_thread = None
         self.index_camera = None
+        self.index_microphone = None
 
         uic.loadUi("GUI/main.ui", self)
         self.setFixedSize(982, 855)
@@ -242,6 +168,7 @@ class StartWindow(QMainWindow, Mixins):
             threading.Thread(target=self.thread_stream, args=(), daemon=True).start()
 
     def thread_stream(self):
+        # TODO optimize
         while True:
             count = 0
             if self.preview:
@@ -287,11 +214,16 @@ class StartWindow(QMainWindow, Mixins):
         dialog.show()
         dialog.exec_()
 
-        if os.path.exists("temp.wav"):
-            os.remove("temp.wav")
+        # if os.path.exists("temp.wav"):
+        #     os.remove("temp.wav")
+
+        self.record_stream = False
+        self.play_stream = False
+        self.time_stream = False
 
         if dialog.result() == 1:
-            pass
+            self.index_microphone = list(self.microphones)[dialog.microplace.currentIndex()]
+            self.mic.setText(dialog.microplace.currentText())
 
     def set_enabled_flag(self):
         for index in range(6):
@@ -302,11 +234,8 @@ class StartWindow(QMainWindow, Mixins):
         self.stop.setEnabled(False)
 
     def thread_add_path(self):
-        for process in threading.enumerate():
-            if process.name.count("add_path"):
-                return
-        else:
-            threading.Thread(target=self.add_path, args=(), daemon=True).start()
+        # threading.Thread(target=self.add_path, args=(), daemon=True).start()
+        self.add_path()
 
     def add_path(self):
         dir_path = QFileDialog.getExistingDirectory(None,
