@@ -1,8 +1,6 @@
-import os
 import threading
 import time
 import wave
-from datetime import datetime
 
 import pyaudio
 
@@ -73,16 +71,7 @@ class Mixins:
         wave_file.setframerate(self.rate)
         wave_file.writeframes(b''.join(self.audio_frames))
         wave_file.close()
-
-        self.record.setEnabled(True)
-        self.stop.setEnabled(False)
-
-        # if os.path.exists(f"{self.file_name}"):
-        #     self.play.setEnabled(True)
-
-        self.play_stream = False
-        self.record_stream = False
-        self.time_stream = False
+        self.stop_audio()
 
     def set_play_audio(self):
         self.chunk = 1024
@@ -94,24 +83,22 @@ class Mixins:
                                              output=True)
 
     def play_audio(self):
-        data = self.wav_file.readframes(self.chunk)
-        while data != '' or self.play_stream:
-            self.wav_stream.write(data)
+        data = None
+        while str(data) != "b''" or not self.play_stream:
             data = self.wav_file.readframes(self.chunk)
-            print(data)
+            self.wav_stream.write(data)
 
+        self.stop_audio()
         self.wav_file.close()
         self.wav_stream.close()
         self.py_audio.terminate()
-
-        self.time_stream = False
-        self.play_stream = False
 
     def set_time(self):
         self.second = 0
         self.minute = 0
         self.hour = 0
         self.time.setText(f'[{self.hour:02d}:{self.minute:02d}:{self.second:02d}]')
+        self.time_stream = True
 
     def run_time(self):
         while self.time_stream:

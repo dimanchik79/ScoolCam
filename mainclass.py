@@ -1,10 +1,7 @@
 import os
 import sys
 import threading
-import time
-import wave
 import cv2
-import pyaudio
 
 from datetime import datetime
 
@@ -83,6 +80,8 @@ class MicSelect(QDialog, Mixins):
         self.record_stream = False
         self.play_stream = False
         self.play.setEnabled(True)
+        self.stop.setEnabled(False)
+        self.record.setEnabled(True)
 
     def wav_play(self):
         self.play.setEnabled(False)
@@ -216,10 +215,9 @@ class StartWindow(QMainWindow, Mixins):
 
         # if os.path.exists("temp.wav"):
         #     os.remove("temp.wav")
-
+        self.time_stream = False
         self.record_stream = False
         self.play_stream = False
-        self.time_stream = False
 
         if dialog.result() == 1:
             self.index_microphone = list(self.microphones)[dialog.microplace.currentIndex()]
@@ -234,6 +232,7 @@ class StartWindow(QMainWindow, Mixins):
         self.stop.setEnabled(False)
 
     def thread_add_path(self):
+
         # threading.Thread(target=self.add_path, args=(), daemon=True).start()
         self.add_path()
 
