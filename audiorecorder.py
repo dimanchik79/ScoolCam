@@ -1,13 +1,10 @@
 import wave
 import pyaudio
 
-from mixins import TimeRuner
-
 
 class AudioRecord:
-    def __init__(self, microphone_index, time_label):
-
-        self.timer = None
+    def __init__(self, microphone_index):
+        self.wave_file = None
         self.frame = None
         self.audio_stream = None
         self.audio_frames = None
@@ -17,9 +14,7 @@ class AudioRecord:
         self.rate = None
         self.audio = None
 
-        self.stop_record = False
         self.microphone_index = microphone_index
-        self.time_label = time_label
 
     def audiorecord_init(self):
         self.audio = pyaudio.PyAudio()
@@ -27,64 +22,48 @@ class AudioRecord:
         self.channels = 1
         self.frames_per_buffer = 1024
         self.format = pyaudio.paInt16
-        self.audio_frames = []
         self.audio_stream = self.audio.open(format=self.format, channels=self.channels, rate=self.rate,
                                             input_device_index=self.microphone_index,
                                             frames_per_buffer=self.frames_per_buffer, input=True)
-        self.timer = TimeRuner(self.time_label)
-        self.timer.timer_initial()
+        self.wave_file = wave.open(f"temp_audio.wav", 'wb')
+        self.wave_file.setnchannels(self.channels)
+        self.wave_file.setsampwidth(self.audio.get_sample_size(self.format))
+        self.wave_file.setframerate(self.rate)
 
     def audio_record(self):
-        while not self.stop_record:
-            self.frame = self.audio_stream.read(self.frames_per_buffer)
-            self.audio_frames.append(self.frame)
-            self.timer.run_time()
+        self.frame = self.audio_stream.read(self.frames_per_buffer)
+        self.wave_file.writeframes(b''.join([self.frame]))
 
-        self.timer.timer_stop = True
-        self.stop_record = True
-
+    def stop_record(self):
         self.audio_stream.stop_stream()
         self.audio_stream.close()
         self.audio.terminate()
-        wave_file = wave.open(f"temp_audio.wav", 'wb')
-        wave_file.setnchannels(self.channels)
-        wave_file.setsampwidth(self.audio.get_sample_size(self.format))
-        wave_file.setframerate(self.rate)
-        wave_file.writeframes(b''.join(self.audio_frames))
-        wave_file.close()
+        self.wave_file.close()
 
 
 class AudioPlayer:
 
-    def __init__(self, time_label: object):
-        self.frame = None
+    def __init__(self):
         self.wav_stream = None
         self.py_audio = None
         self.wav_file = None
         self.chunk = None
+        self.frame = None
 
-        self.time_label = time_label
-        self.play_stop = False
-
-    def play_initial(self):
+    def player_init(self):
         self.chunk = 1024
         self.wav_file = wave.open("temp_audio.wav", 'rb')
         self.py_audio = pyaudio.PyAudio()
         self.wav_stream = self.py_audio.open(format=self.py_audio.get_format_from_width(self.wav_file.getsampwidth()),
                                              channels=self.wav_file.getnchannels(), rate=self.wav_file.getframerate(),
                                              output=True)
-        self.timer = TimeRuner(self.time)
-        self.timer.timer_initial()
 
     def play_audio(self):
-        while self.frame != "b''" or not self.play_stop:
-            self.frame = self.wav_file.readframes(self.chunk)
-            self.wav_stream.write(self.frame)
-            self.time.run_time()
+        self.frame = self.wav_file.readframes(self.chunk)
+        self.wav_stream.write(self.frame)
 
-        self.play_stop = True
-        self.time.timer_stop = True
-
-        self.wav_file.close()
+    def stop_player(self):
         self.wav_stream.close()
         self.py_audio.terminate()
+        self.wav_file.close()
+
