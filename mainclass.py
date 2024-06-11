@@ -1,18 +1,11 @@
-import os
-import subprocess
 import sys
-import threading
-import wave
-
 import cv2
 
 from datetime import datetime
 
-import pyaudio
-from PyQt5 import uic, QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem, QFileDialog
-from typing_extensions import Dict
+from PyQt5.QtWidgets import QMainWindow, QListWidgetItem, QFileDialog
 
 from config import MSG_WHITE, MSG_GREEN, MSG_RED
 

@@ -85,6 +85,7 @@ class MicSelect(QDialog):
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
         self.play.setEnabled(True)
+
         self.start_timer = False
         self.start_record = False
         self.start_play = False
