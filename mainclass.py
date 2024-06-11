@@ -70,7 +70,7 @@ class StartWindow(QMainWindow):
         self.index_microphone = None
 
         uic.loadUi("GUI/main.ui", self)
-        self.setFixedSize(982, 855)
+        self.setFixedSize(982, 795)
 
         # self.cameras = cameras
         self.cameras = cameras

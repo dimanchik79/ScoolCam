@@ -23,13 +23,9 @@ class MicSelect(QDialog):
         uic.loadUi("GUI/micselect.ui", self)
         self.setFixedSize(400, 300)
 
-        self.recorder = AudioRecord(self.id_microphone)
-        self.player = AudioPlayer()
-        self.timer = TimeRuner(self.time)
-
-        self.stop_record = False
-        self.stop_play = False
-        self.stop_timer = False
+        self.start_record = True
+        self.start_play = True
+        self.start_timer = True
 
         self.stop.setEnabled(False)
         self.play.setEnabled(False)
@@ -42,16 +38,19 @@ class MicSelect(QDialog):
         self.buttonBox.accepted.connect(self.exit_micselect)
         self.buttonBox.rejected.connect(self.exit_micselect)
 
+        self.timer = TimeRuner(self.time)
+        self.player = AudioPlayer()
+        self.recorder = AudioRecord(self.id_microphone)
         self.add_item()
 
     def exit_micselect(self):
         for process in threading.enumerate():
             if process.name.count("thread_timer_run"):
-                self.stop_timer = True
+                self.start_timer = True
             if process.name.count("thread_wav_play"):
-                self.stop_play = True
+                self.start_play = True
             if process.name.count("thread_wav_record"):
-                self.stop_record = True
+                self.start_record = True
         time.sleep(1)
 
     def record_audio(self):
@@ -59,52 +58,53 @@ class MicSelect(QDialog):
         self.stop.setEnabled(True)
         self.play.setEnabled(False)
 
+        self.start_timer = True
+        self.start_record = True
+
         self.timer.timer_set_zero()
         self.recorder.audiorecord_init()
 
         threading.Thread(target=self.thread_wav_record, args=(), daemon=True).start()
         threading.Thread(target=self.thread_timer_run, args=(), daemon=True).start()
 
-    def thread_wav_record(self):
-        while not self.stop_record:
-            self.recorder.audio_record()
-        self.recorder.stop_record()
-
-    def thread_wav_play(self):
-        while self.player.frame != b'':
-            if self.stop_play:
-                break
-            self.player.play_audio()
-        self.player.stop_player()
-        self.stop_audio()
-
-    def thread_timer_run(self):
-        while not self.stop_timer:
-            self.timer.run_time()
-
-    def stop_audio(self):
-        self.record.setEnabled(True)
-        self.stop.setEnabled(False)
-        self.play.setEnabled(True)
-
-        self.stop_record = True
-        self.stop_play = True
-        self.stop_timer = True
-
     def play_audio(self):
         self.play.setEnabled(False)
         self.stop.setEnabled(True)
         self.record.setEnabled(False)
 
-        self.stop_play = False
-        self.stop_timer = False
-        self.stop_record = False
+        self.start_timer = True
+        self.start_play = True
 
         self.timer.timer_set_zero()
         self.player.player_init()
 
         threading.Thread(target=self.thread_wav_play, args=(), daemon=True).start()
         threading.Thread(target=self.thread_timer_run, args=(), daemon=True).start()
+
+    def stop_audio(self):
+        self.record.setEnabled(True)
+        self.stop.setEnabled(False)
+        self.play.setEnabled(True)
+        self.start_timer = False
+        self.start_record = False
+        self.start_play = False
+        time.sleep(1)
+
+    def thread_wav_record(self):
+        while self.start_record:
+            self.recorder.audio_record()
+        self.recorder.stop_record()
+        self.stop_audio()
+
+    def thread_wav_play(self):
+        while self.player.frame != b'' or not self.start_play:
+            self.player.play_audio()
+        self.player.stop_player()
+        self.stop_audio()
+
+    def thread_timer_run(self):
+        while self.start_timer:
+            self.timer.run_time()
 
     def add_item(self):
         microphones = [mic for _, mic in self.microphones.items()]

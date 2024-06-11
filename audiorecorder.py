@@ -44,11 +44,11 @@ class AudioRecord:
 class AudioPlayer:
 
     def __init__(self):
+        self.frame = None
         self.wav_stream = None
         self.py_audio = None
         self.wav_file = None
         self.chunk = None
-        self.frame = None
 
     def player_init(self):
         self.chunk = 1024
@@ -63,6 +63,7 @@ class AudioPlayer:
         self.wav_stream.write(self.frame)
 
     def stop_player(self):
+        self.frame = None
         self.wav_stream.close()
         self.py_audio.terminate()
         self.wav_file.close()
