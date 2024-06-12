@@ -4,13 +4,13 @@ import cv2
 from datetime import datetime
 
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QListWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 
 from config import MSG_WHITE, MSG_GREEN, MSG_RED
 
 from micselect import *
 from mixins import *
+from camselect import *
 
 
 def current_date(mark: int) -> str:
@@ -28,22 +28,6 @@ def current_date(mark: int) -> str:
         return str(datetime.now())
 
 
-class CamSelect(QDialog):
-    def __init__(self, cameras: Dict):
-        super().__init__()
-        self.cameras = cameras
-        uic.loadUi("GUI/camselect.ui", self)
-        self.setFixedSize(400, 552)
-        self.add_item()
-
-    def add_item(self):
-        for key, cam in self.cameras.items():
-            item = QListWidgetItem(cam)
-            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-            item.setCheckState(Qt.Unchecked)
-            self.camplace.addItem(item)
-
-
 class PreviewCam(QDialog):
     def __init__(self):
         super().__init__()
@@ -54,9 +38,9 @@ class PreviewCam(QDialog):
 class StartWindow(QMainWindow):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
+
+        self.videoframe = None
         self.fourcc = None
-        self.video_file = []
-        self.out = []
         self.preview_dialog = None
         self.stream_thread = None
         self.index_camera = None
@@ -91,24 +75,32 @@ class StartWindow(QMainWindow):
         self.path_select.clicked.connect(self.thread_add_path)
         self.button.clicked.connect(self.init_connections)
         self.record.clicked.connect(self.start_record)
+        self.stop.clicked.connect(self.stop_record)
         self.exit.clicked.connect(self.exit_program)
 
         self.set_enabled_flag()
+        self.timer = TimeRuner(self.time)
         self.define_cameras()
 
-    def init_connections(self):
+    def init_connections(self) -> None:
+        """Метод инициализирует подключение к камерам"""
         if not self.initial:
             self.initial = True
+
             for count in range(len(self.active_cam)):
                 self.main_objects['camera_name'][count].setText(self.active_cam[count])
+
             threading.Thread(target=self.thread_camera_initial, args=(), daemon=True).start()
+
             for count in range(len(self.active_cam)):
                 self.main_objects['camera_name'][count].setEnabled(True)
                 self.main_objects['preview'][count].setEnabled(True)
 
-    def thread_camera_initial(self):
+    def thread_camera_initial(self) -> None:
+        """Метод подключает поток видео с камер"""
         if not self.stream:
             self.stream = True
+
             for index, name in self.active_cam.items():
                 SetMessage(self.msg_label, f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
                 self.capture.append(cv2.VideoCapture(index))
@@ -117,16 +109,18 @@ class StartWindow(QMainWindow):
                        MSG_GREEN)
             self.record.setEnabled(True)
             self.stop.setEnabled(True)
-            threading.Thread(target=self.thread_stream, args=(), daemon=True).start()
 
-    def thread_stream(self):
+            threading.Thread(target=self.thread_main_stream, args=(), daemon=True).start()
+
+    def thread_main_stream(self) -> None:
+        """Метод воспроизводит главный поток видео с камер"""
         # TODO optimize
         while True:
             count = 0
             if self.preview:
-                correct_frame, frame = self.capture[self.index_camera].read()
+                correct_frame, self.videoframe = self.capture[self.index_camera].read()
                 if correct_frame:
-                    image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    image = cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB)
                     flipped_image = cv2.flip(image, 1)
                     qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                             QtGui.QImage.Format_RGB888)
@@ -135,9 +129,9 @@ class StartWindow(QMainWindow):
                     self.preview_dialog.preview.setPixmap(pixmap)
             else:
                 for capture in self.capture:
-                    correct_frame, frame = capture.read()
+                    correct_frame, self.videoframe = capture.read()
                     if correct_frame:
-                        image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                        image = cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB)
                         flipped_image = cv2.flip(image, 1)
                         qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                                 QtGui.QImage.Format_RGB888)
@@ -146,7 +140,8 @@ class StartWindow(QMainWindow):
                         self.main_objects['camera'][count].setPixmap(pixmap)
                         count += 1
 
-    def define_cameras(self):
+    def define_cameras(self) -> None:
+
         if len(self.cameras) > 6:
             dialog = CamSelect(cameras=self.cameras)
             dialog.show()
@@ -192,7 +187,7 @@ class StartWindow(QMainWindow):
         else:
             self.path.setText(dir_path)
 
-    def set_cameras_preview(self):
+    def set_cameras_preview(self) -> None:
         index = self.temp[self.sender().objectName()]
         camera_name = self.active_cam[index]
         for key, word in self.active_cam.items():
@@ -217,14 +212,27 @@ class StartWindow(QMainWindow):
         """Метод закрывает окно программы"""
         sys.exit()
 
-    def start_record(self):
-        SetMessage(self.time_label, "Идет запись с выбранных камер...", MSG_RED)
+    def start_record(self) -> None:
+        """Метод запускает в потоке процедуру записи видео"""
+        SetMessage(self.msg_label, "Идет запись с выбранных камер...", MSG_RED)
         self.record.setEnabled(False)
         self.stop.setEnabled(True)
+
         self.record_video = True
 
+        self.timer.timer_set_zero()
+        threading.Thread(target=self.thread_record, daemon=True).start()
+
     def stop_record(self):
-        SetMessage(self.time_label, "Монтаж видео завершен", MSG_GREEN)
+        """Метод останавливает процедуру записи видео"""
+        SetMessage(self.msg_label, "Монтаж видео завершен", MSG_GREEN)
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
         self.record_video = False
+
+        self.record_video = False
+
+    def thread_record(self) -> None:
+        """Метод записывает видео"""
+        while self.record_video:
+            self.timer.run_time()
