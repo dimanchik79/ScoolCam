@@ -46,11 +46,11 @@ class MicSelect(QDialog):
     def exit_micselect(self):
         for process in threading.enumerate():
             if process.name.count("thread_timer_run"):
-                self.start_timer = True
+                self.start_timer = False
             if process.name.count("thread_wav_play"):
-                self.start_play = True
+                self.start_play = False
             if process.name.count("thread_wav_record"):
-                self.start_record = True
+                self.start_record = False
         time.sleep(1)
 
     def record_audio(self):
