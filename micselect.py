@@ -89,7 +89,6 @@ class MicSelect(QDialog):
         self.start_timer = False
         self.start_record = False
         self.start_play = False
-        time.sleep(1)
 
     def thread_wav_record(self):
         while self.start_record:
@@ -98,7 +97,9 @@ class MicSelect(QDialog):
         self.stop_audio()
 
     def thread_wav_play(self):
-        while self.player.frame != b'' or not self.start_play:
+        while self.player.frame != b'':
+            if self.start_play is False:
+                break
             self.player.play_audio()
         self.player.stop_player()
         self.stop_audio()
