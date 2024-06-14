@@ -29,6 +29,10 @@ def current_date(mark: int) -> str:
 
 
 class PreviewCam(QDialog):
+    """
+    Класс PreviewCam
+    """
+
     def __init__(self):
         super().__init__()
         uic.loadUi("GUI/preview.ui", self)
@@ -72,7 +76,7 @@ class StartWindow(QMainWindow):
             camera.clicked.connect(self.set_cameras_preview)
 
         self.mic_select.clicked.connect(self.add_microphone)
-        self.path_select.clicked.connect(self.thread_add_path)
+        self.path_select.clicked.connect(self.add_path)
         self.button.clicked.connect(self.init_connections)
         self.record.clicked.connect(self.start_record)
         self.stop.clicked.connect(self.stop_record)
@@ -85,32 +89,40 @@ class StartWindow(QMainWindow):
     def init_connections(self) -> None:
         """Метод инициализирует подключение к камерам"""
         if not self.initial:
-            self.initial = True
+            try:
+                self.initial = True
 
-            for count in range(len(self.active_cam)):
-                self.main_objects['camera_name'][count].setText(self.active_cam[count])
+                for count in range(len(self.active_cam)):
+                    self.main_objects['camera_name'][count].setText(self.active_cam[count])
 
-            threading.Thread(target=self.thread_camera_initial, args=(), daemon=True).start()
+                threading.Thread(target=self.thread_camera_initial, args=(), daemon=True).start()
 
-            for count in range(len(self.active_cam)):
-                self.main_objects['camera_name'][count].setEnabled(True)
-                self.main_objects['preview'][count].setEnabled(True)
+                for count in range(len(self.active_cam)):
+                    self.main_objects['camera_name'][count].setEnabled(True)
+                    self.main_objects['preview'][count].setEnabled(True)
+            except Exception as e:
+                SetMessage(self.msg_label, "Упс! Что-то пошло не так, попробуйте еше разок", MSG_RED)
+                self.initial = False
 
     def thread_camera_initial(self) -> None:
         """Метод подключает поток видео с камер"""
         if not self.stream:
-            self.stream = True
+            try:
+                self.stream = True
 
-            for index, name in self.active_cam.items():
-                SetMessage(self.msg_label, f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
-                self.capture.append(cv2.VideoCapture(index))
+                for index, name in self.active_cam.items():
+                    SetMessage(self.msg_label, f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
+                    self.capture.append(cv2.VideoCapture(index))
 
-            SetMessage(self.msg_label, "Камеры подключены. Отметьте галочкой нужные устройства и включите запись",
-                       MSG_GREEN)
-            self.record.setEnabled(True)
-            self.stop.setEnabled(True)
+                SetMessage(self.msg_label, "Камеры подключены. Отметьте галочкой нужные устройства и включите запись",
+                           MSG_GREEN)
+                self.record.setEnabled(True)
+                self.stop.setEnabled(True)
+                threading.Thread(target=self.thread_main_stream, args=(), daemon=True).start()
 
-            threading.Thread(target=self.thread_main_stream, args=(), daemon=True).start()
+            except Exception as e:
+                SetMessage(self.msg_label, "Упс! Что-то пошло не так, попробуйте еше разок", MSG_RED)
+                self.initial = False
 
     def thread_main_stream(self) -> None:
         """Метод воспроизводит главный поток видео с камер"""
@@ -120,28 +132,27 @@ class StartWindow(QMainWindow):
             if self.preview:
                 correct_frame, self.videoframe = self.capture[self.index_camera].read()
                 if correct_frame:
-                    image = cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB)
-                    flipped_image = cv2.flip(image, 1)
+                    flipped_image = cv2.flip(cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB), 1)
                     qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                             QtGui.QImage.Format_RGB888)
                     pic = qt_image.scaled(1001, 661, QtCore.Qt.KeepAspectRatio)
                     pixmap = QtGui.QPixmap.fromImage(pic)
+
                     self.preview_dialog.preview.setPixmap(pixmap)
             else:
                 for capture in self.capture:
                     correct_frame, self.videoframe = capture.read()
                     if correct_frame:
-                        image = cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB)
-                        flipped_image = cv2.flip(image, 1)
+                        flipped_image = cv2.flip(cv2.cvtColor(self.videoframe, cv2.COLOR_BGR2RGB), 1)
                         qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                                 QtGui.QImage.Format_RGB888)
                         pic = qt_image.scaled(281, 231, QtCore.Qt.KeepAspectRatio)
                         pixmap = QtGui.QPixmap.fromImage(pic)
+
                         self.main_objects['camera'][count].setPixmap(pixmap)
                         count += 1
 
     def define_cameras(self) -> None:
-
         if len(self.cameras) > 6:
             dialog = CamSelect(cameras=self.cameras)
             dialog.show()
@@ -156,7 +167,8 @@ class StartWindow(QMainWindow):
                         self.active_cam[str(count)] = cb.text()
                     count += 1
 
-    def add_microphone(self):
+    def add_microphone(self) -> None:
+        """Функция реализует выбор микрофона для записи видео"""
         dialog = MicSelect(microphones=self.microphones)
         dialog.show()
         dialog.exec_()
@@ -165,20 +177,16 @@ class StartWindow(QMainWindow):
             self.index_microphone = list(self.microphones)[dialog.microplace.currentIndex()]
             self.mic.setText(dialog.microplace.currentText())
 
-    def set_enabled_flag(self):
+    def set_enabled_flag(self) -> None:
+        """Функция выставляет нужные setEnabled элементам формы"""
         for index in range(6):
             self.main_objects['camera_name'][index].setEnabled(False)
             self.main_objects['preview'][index].setEnabled(False)
-
         self.record.setEnabled(False)
         self.stop.setEnabled(False)
 
-    def thread_add_path(self):
-
-        # threading.Thread(target=self.add_path, args=(), daemon=True).start()
-        self.add_path()
-
-    def add_path(self):
+    def add_path(self) -> None:
+        """Фунция реализует выбор пути для записи видео"""
         dir_path = QFileDialog.getExistingDirectory(None,
                                                     'Выбирете путь, куда будет будет записываться видеофайлы:',
                                                     '')
@@ -208,7 +216,7 @@ class StartWindow(QMainWindow):
         self.exit_program()
 
     @staticmethod
-    def exit_program():
+    def exit_program() -> None:
         """Метод закрывает окно программы"""
         sys.exit()
 
@@ -223,7 +231,7 @@ class StartWindow(QMainWindow):
         self.timer.timer_set_zero()
         threading.Thread(target=self.thread_record, daemon=True).start()
 
-    def stop_record(self):
+    def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
         SetMessage(self.msg_label, "Монтаж видео завершен", MSG_GREEN)
         self.record.setEnabled(True)

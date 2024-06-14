@@ -16,16 +16,16 @@ class VideoRecorder:
 
         self.fourcc = cv2.VideoWriter_fourcc(*'MPEG')
 
-    def videorecord_init(self, parrent: object, current_frame: object, cameras: dict, captures: list):
+    def videorecord_init(self, parrent: object, current_frames: object, cameras: dict, captures: list):
         self.cameras = cameras
         self.window = parrent
-        self.frame = current_frame
+        self.frames = current_frames
         self.captures = captures
 
         for key, word in self.cameras.items():
             pass
-        self.out.append(cv2.VideoWriter_fourcc(f'{self.file}', self.fourcc, 25, (768, 1024)))
 
+        self.out.append(cv2.VideoWriter_fourcc(f'{self.file}', self.fourcc, 25, (768, 1024)))
 
     def video_save(self):
         for file in self.out:

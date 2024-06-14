@@ -10,6 +10,10 @@ from audiorecorder import AudioRecord, AudioPlayer
 
 
 class MicSelect(QDialog):
+    """
+    Класс MicSelect
+    класс реализует процесс выбора микрофона, проверки записи звука
+    """
     def __init__(self, microphones: Dict):
         super().__init__()
 
@@ -43,7 +47,8 @@ class MicSelect(QDialog):
         self.recorder = AudioRecord(self.id_microphone)
         self.add_item()
 
-    def exit_micselect(self):
+    def exit_micselect(self) -> None:
+        """Метод реализует выход из micselect с закрытием всех запущенных потоков"""
         for process in threading.enumerate():
             if process.name.count("thread_timer_run"):
                 self.start_timer = False
@@ -53,7 +58,8 @@ class MicSelect(QDialog):
                 self.start_record = False
         time.sleep(1)
 
-    def record_audio(self):
+    def record_audio(self) -> None:
+        """Метод реализует процесс подготовки потока записи звука с выбранного микрофона"""
         self.record.setEnabled(False)
         self.stop.setEnabled(True)
         self.play.setEnabled(False)
@@ -67,7 +73,8 @@ class MicSelect(QDialog):
         threading.Thread(target=self.thread_wav_record, args=(), daemon=True).start()
         threading.Thread(target=self.thread_timer_run, args=(), daemon=True).start()
 
-    def play_audio(self):
+    def play_audio(self) -> None:
+        """Метод реализует полготовку потоков к воспроизведению звука с выбранного микрофона"""
         self.play.setEnabled(False)
         self.stop.setEnabled(True)
         self.record.setEnabled(False)
@@ -81,7 +88,8 @@ class MicSelect(QDialog):
         threading.Thread(target=self.thread_wav_play, args=(), daemon=True).start()
         threading.Thread(target=self.thread_timer_run, args=(), daemon=True).start()
 
-    def stop_audio(self):
+    def stop_audio(self) -> None:
+        """Метод реализует процесс остановки записи или воспроизведения звука"""
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
         self.play.setEnabled(True)
@@ -90,13 +98,15 @@ class MicSelect(QDialog):
         self.start_record = False
         self.start_play = False
 
-    def thread_wav_record(self):
+    def thread_wav_record(self) -> None:
+        """Метод реализует процесс записи звука с выбранного микрофона"""
         while self.start_record:
             self.recorder.audio_record()
         self.recorder.stop_record()
         self.stop_audio()
 
-    def thread_wav_play(self):
+    def thread_wav_play(self) -> None:
+        """Метод реализует процесс воспроизведения звука с выбранного микрофона"""
         while self.player.frame != b'':
             if self.start_play is False:
                 break
@@ -104,15 +114,18 @@ class MicSelect(QDialog):
         self.player.stop_player()
         self.stop_audio()
 
-    def thread_timer_run(self):
+    def thread_timer_run(self) -> None:
+        """Метод реализует процесс таймера"""
         while self.start_timer:
             self.timer.run_time()
 
-    def add_item(self):
+    def add_item(self) -> None:
+        """Метод реализует заполнение раскрывающегося списка microplace"""
         microphones = [mic for _, mic in self.microphones.items()]
         self.microplace.addItems(microphones)
 
-    def get_id_microphone(self):
+    def get_id_microphone(self) -> None:
+        """Метод реализует сопоставления id микрофона по его названию из словаря microphones"""
         for key, word in self.microphones.items():
             if word == self.microplace.currentText():
                 self.id_microphone = key
