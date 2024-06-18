@@ -1,36 +1,37 @@
-import subprocess
+# import subprocess
 import cv2
 
 
 class VideoRecorder:
 
-    def __init__(self, ):
-        self.captures = []
-        self.frame = None
+    def __init__(self, cameras: dict, date: str):
+
         self.window = None
         self.cameras = {}
+        self.files = []
         self.out = []
         self.fps = None
         self.height = None
         self.width = None
 
-        self.fourcc = cv2.VideoWriter_fourcc(*'MPEG')
-
-    def videorecord_init(self, parrent: object, current_frames: object, cameras: dict, captures: list):
         self.cameras = cameras
-        self.window = parrent
-        self.frames = current_frames
-        self.captures = captures
+        self.date = date
 
-        for key, word in self.cameras.items():
-            pass
+    def videorecord_init(self):
+        fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+        for key in self.cameras.keys():
+            self.files.append(f"camera-{key}-{self.date}.avi")
+        for count in range(len(self.files)):
+            self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (640, 480)))
 
-        self.out.append(cv2.VideoWriter_fourcc(f'{self.file}', self.fourcc, 25, (768, 1024)))
-
-    def video_save(self):
-        for file in self.out:
-            file.write(self.frame)
+    def video_save(self, frames):
+        count = 0
+        for out in self.out:
+            out.write(frames[count])
+            count += 1
 
     def stop_record(self):
-        self.out[0].release()
-        subprocess.run(f"ffmpeg -i {self.video_file[0]} -i temp.wav -c copy {self.video_file[0]}")
+        for count in range(len(self.out)):
+            self.out[count].release()
+
+

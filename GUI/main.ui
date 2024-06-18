@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>982</width>
+    <width>959</width>
     <height>795</height>
    </rect>
   </property>
@@ -30,7 +30,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>670</y>
       <width>331</width>
       <height>16</height>
@@ -49,7 +49,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>690</y>
       <width>301</width>
       <height>31</height>
@@ -62,7 +62,7 @@
    <widget class="QPushButton" name="mic_select">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>320</x>
       <y>690</y>
       <width>31</width>
       <height>31</height>
@@ -85,7 +85,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>370</x>
       <y>670</y>
       <width>321</width>
       <height>16</height>
@@ -104,7 +104,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>370</x>
       <y>690</y>
       <width>331</width>
       <height>31</height>
@@ -117,7 +117,7 @@
    <widget class="QPushButton" name="path_select">
     <property name="geometry">
      <rect>
-      <x>710</x>
+      <x>700</x>
       <y>690</y>
       <width>31</width>
       <height>31</height>
@@ -140,7 +140,7 @@
    <widget class="QPushButton" name="record">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>850</x>
       <y>680</y>
       <width>41</width>
       <height>41</height>
@@ -179,7 +179,7 @@
    <widget class="QPushButton" name="stop">
     <property name="geometry">
      <rect>
-      <x>910</x>
+      <x>900</x>
       <y>680</y>
       <width>41</width>
       <height>41</height>
@@ -218,7 +218,7 @@
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>80</x>
       <y>740</y>
       <width>791</width>
       <height>41</height>
@@ -248,7 +248,7 @@
    <widget class="QCheckBox" name="nam_5">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>340</x>
       <y>350</y>
       <width>245</width>
       <height>31</height>
@@ -272,7 +272,7 @@ padding: 0 10px;</string>
    <widget class="QCheckBox" name="nam_4">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>350</y>
       <width>245</width>
       <height>31</height>
@@ -296,7 +296,7 @@ padding: 0 10px;</string>
    <widget class="QLabel" name="cam_5">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>340</x>
       <y>380</y>
       <width>281</width>
       <height>231</height>
@@ -307,7 +307,7 @@ padding: 0 10px;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -316,7 +316,7 @@ color: white;</string>
    <widget class="QCheckBox" name="nam_2">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>340</x>
       <y>60</y>
       <width>245</width>
       <height>31</height>
@@ -340,7 +340,7 @@ padding: 0 10px;</string>
    <widget class="QLabel" name="cam_3">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>660</x>
       <y>90</y>
       <width>281</width>
       <height>231</height>
@@ -351,7 +351,7 @@ padding: 0 10px;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -360,7 +360,7 @@ color: white;</string>
    <widget class="QCheckBox" name="nam_1">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>60</y>
       <width>245</width>
       <height>31</height>
@@ -384,7 +384,7 @@ padding: 0 10px;</string>
    <widget class="QCheckBox" name="nam_3">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>660</x>
       <y>60</y>
       <width>245</width>
       <height>31</height>
@@ -408,7 +408,7 @@ padding: 0 10px;</string>
    <widget class="QLabel" name="cam_4">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>380</y>
       <width>281</width>
       <height>231</height>
@@ -419,7 +419,7 @@ padding: 0 10px;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -428,7 +428,7 @@ color: white;</string>
    <widget class="QLabel" name="cam_1">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>90</y>
       <width>281</width>
       <height>231</height>
@@ -439,7 +439,7 @@ color: white;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -448,7 +448,7 @@ color: white;</string>
    <widget class="QLabel" name="cam_6">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>660</x>
       <y>380</y>
       <width>281</width>
       <height>231</height>
@@ -459,7 +459,7 @@ color: white;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -468,7 +468,7 @@ color: white;</string>
    <widget class="QLabel" name="cam_2">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>340</x>
       <y>90</y>
       <width>281</width>
       <height>231</height>
@@ -479,7 +479,7 @@ color: white;</string>
 color: white;</string>
     </property>
     <property name="text">
-     <string>нет сигнала от камеры</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -488,7 +488,7 @@ color: white;</string>
    <widget class="QCheckBox" name="nam_6">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>660</x>
       <y>350</y>
       <width>245</width>
       <height>31</height>
@@ -512,7 +512,7 @@ padding: 0 10px;</string>
    <widget class="QLabel" name="msg_label">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>630</y>
       <width>921</width>
       <height>31</height>
@@ -537,7 +537,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="button">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>15</y>
       <width>921</width>
       <height>31</height>
@@ -567,7 +567,7 @@ border-radius: 5px;</string>
    <widget class="QLabel" name="time">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>740</x>
       <y>680</y>
       <width>101</width>
       <height>41</height>
@@ -591,7 +591,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_1">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>270</x>
       <y>60</y>
       <width>31</width>
       <height>28</height>
@@ -624,7 +624,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_2">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>590</x>
       <y>60</y>
       <width>31</width>
       <height>28</height>
@@ -657,7 +657,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_3">
     <property name="geometry">
      <rect>
-      <x>920</x>
+      <x>910</x>
       <y>60</y>
       <width>31</width>
       <height>28</height>
@@ -690,7 +690,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_4">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>270</x>
       <y>350</y>
       <width>31</width>
       <height>28</height>
@@ -716,7 +716,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_5">
     <property name="geometry">
      <rect>
-      <x>600</x>
+      <x>590</x>
       <y>350</y>
       <width>31</width>
       <height>28</height>
@@ -742,7 +742,7 @@ border-radius: 5px;</string>
    <widget class="QPushButton" name="prev_6">
     <property name="geometry">
      <rect>
-      <x>920</x>
+      <x>910</x>
       <y>350</y>
       <width>31</width>
       <height>28</height>

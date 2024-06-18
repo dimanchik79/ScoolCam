@@ -67,4 +67,3 @@ class AudioPlayer:
         self.wav_stream.close()
         self.py_audio.terminate()
         self.wav_file.close()
-
