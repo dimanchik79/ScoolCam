@@ -7,7 +7,6 @@ class AudioRecord:
         self.wave_file = None
         self.frame = None
         self.audio_stream = None
-        self.audio_frames = None
         self.format = None
         self.frames_per_buffer = None
         self.channels = None
@@ -42,6 +41,14 @@ class AudioRecord:
 
 
 class AudioPlayer:
+    """
+    Класс для воспроизведения аудио
+    frame: object - кусок данных для записи в аудио
+    wav_stream: object - поток для воспроизведения аудио
+    py_audio: object - объект pyaudio
+    wav_file: wav file
+    chunk: int - размер куска данных для воспроизведения
+    """
 
     def __init__(self):
         self.frame = None

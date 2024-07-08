@@ -243,8 +243,7 @@ class StartWindow(QMainWindow):
             self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (640, 480)))
 
         threading.Thread(target=self.thread_timer_run, daemon=True).start()
-        #TODO доделать запись звука
-        # threading.Thread(target=self.thread_audio_record, daemon=True).start()
+        threading.Thread(target=self.thread_audio_record, daemon=True).start()
 
     def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
@@ -264,5 +263,4 @@ class StartWindow(QMainWindow):
 
     def thread_audio_record(self):
         while self.record_video:
-            # self.audiorecord.audio_record()
-            pass
+            self.audiorecord.audio_record()
