@@ -139,10 +139,6 @@ class StartWindow(QMainWindow):
                 for out in self.out:
                     out.write(self.videoframes[count])
                     count += 1
-            else:
-                for count in range(len(self.out)):
-                    self.out[count].release()
-                    self.record_video = False
 
             if self.preview:
                 flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[self.index_camera], cv2.COLOR_BGR2RGB), 1)
@@ -240,14 +236,15 @@ class StartWindow(QMainWindow):
         self.audiorecord = AudioRecord(self.index_microphone)
         self.audiorecord.audiorecord_init()
 
-        fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         for key in self.active_cam.keys():
             self.files.append(f"camera-{key}-{current_date(1)}.avi")
         for count in range(len(self.files)):
             self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (640, 480)))
 
         threading.Thread(target=self.thread_timer_run, daemon=True).start()
-        threading.Thread(target=self.thread_audio_record, daemon=True).start()
+        #TODO доделать запись звука
+        # threading.Thread(target=self.thread_audio_record, daemon=True).start()
 
     def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
@@ -255,8 +252,10 @@ class StartWindow(QMainWindow):
         self.record.setEnabled(True)
         self.stop.setEnabled(False)
 
-        self.record_video = False
+        for count in range(len(self.out)):
+            self.out[count].release()
 
+        self.record_video = False
         self.audiorecord.stop_record()
 
     def thread_timer_run(self):
@@ -265,4 +264,5 @@ class StartWindow(QMainWindow):
 
     def thread_audio_record(self):
         while self.record_video:
-            self.audiorecord.audio_record()
+            # self.audiorecord.audio_record()
+            pass

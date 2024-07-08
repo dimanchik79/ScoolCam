@@ -33,5 +33,3 @@ class VideoRecorder:
     def stop_record(self):
         for count in range(len(self.out)):
             self.out[count].release()
-
-
