@@ -43,6 +43,7 @@ class StartWindow(QMainWindow):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
 
+        self.videorecord = None
         self.audiorecord = None
         self.recording = None
         self.videoframe = None
@@ -114,7 +115,10 @@ class StartWindow(QMainWindow):
                 self.stream = True
                 for index, name in self.active_cam.items():
                     SetMessage(self.msg_label, f"Идет подключение {name}. Пожалуйста, ждите...", MSG_WHITE)
-                    self.capture.append(cv2.VideoCapture(index))
+                    cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+                    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+                    self.capture.append(cap)
 
                 SetMessage(self.msg_label, "Камеры подключены. Отметьте галочкой нужные устройства и включите запись",
                            MSG_GREEN)
@@ -141,6 +145,8 @@ class StartWindow(QMainWindow):
                     count += 1
 
             if self.preview:
+                if self.videoframes[self.index_camera] is None:
+                    break
                 flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[self.index_camera], cv2.COLOR_BGR2RGB), 1)
                 qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                         QtGui.QImage.Format_RGB888)
@@ -149,6 +155,8 @@ class StartWindow(QMainWindow):
                 self.preview_dialog.preview.setPixmap(pixmap)
             else:
                 for count in range(len(self.active_cam)):
+                    if self.videoframes[count] is None:
+                        continue
                     flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[count], cv2.COLOR_BGR2RGB), 1)
                     qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
                                             QtGui.QImage.Format_RGB888)
@@ -236,31 +244,32 @@ class StartWindow(QMainWindow):
         self.audiorecord = AudioRecord(self.index_microphone)
         self.audiorecord.audiorecord_init()
 
-        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-        for key in self.active_cam.keys():
-            self.files.append(f"camera-{key}-{current_date(1)}.avi")
-        for count in range(len(self.files)):
-            self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (640, 480)))
+        self.videorecord = VideoRecorder(cameras=self.active_cam, date=current_date(1))
+        self.videorecord.videorecord_init()
 
         threading.Thread(target=self.thread_timer_run, daemon=True).start()
-        threading.Thread(target=self.thread_audio_record, daemon=True).start()
+        threading.Thread(target=self.thread_record_run, daemon=True).start()
 
     def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
+        # TODO дописать монтаж видео
+
         SetMessage(self.msg_label, "Монтаж видео завершен", MSG_GREEN)
-        self.record.setEnabled(True)
-        self.stop.setEnabled(False)
+        self.record.setEnabled(True)  # PYQT widget button RECORD
+        self.stop.setEnabled(False)   # PYQT widget button STOP
 
         for count in range(len(self.out)):
             self.out[count].release()
 
         self.record_video = False
+        self.videorecord.stop_record()
         self.audiorecord.stop_record()
 
-    def thread_timer_run(self):
+    def thread_timer_run(self) -> None:
         while self.record_video:
             self.timer.run_time()
 
-    def thread_audio_record(self):
+    def thread_record_run(self) -> None:
         while self.record_video:
+            self.videorecord.video_record(self.videoframes)
             self.audiorecord.audio_record()

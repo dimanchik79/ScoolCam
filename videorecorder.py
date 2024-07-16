@@ -18,16 +18,17 @@ class VideoRecorder:
         self.date = date
 
     def videorecord_init(self):
-        fourcc = cv2.VideoWriter_fourcc('M', 'J', 'P', 'G')
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
         for key in self.cameras.keys():
-            self.files.append(f"camera-{key}-{self.date}.avi")
+            self.files.append(f"camera-{key}-{self.date}.mp4")
         for count in range(len(self.files)):
-            self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (640, 480)))
+            self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (1024, 768)))
 
-    def video_save(self, frames):
+    def video_record(self, frames):
         count = 0
         for out in self.out:
-            out.write(frames[count])
+            frame = cv2.resize(frames[count], (1024, 768), fx=0, fy=0, interpolation=cv2.INTER_CUBIC)
+            out.write(frame)
             count += 1
 
     def stop_record(self):
