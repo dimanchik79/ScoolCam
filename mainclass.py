@@ -50,6 +50,7 @@ class StartWindow(QMainWindow):
         self.fourcc = None
         self.preview_dialog = None
         self.stream_thread = None
+        self.stream = False
         self.index_camera = None
         self.index_microphone = None
 
@@ -132,7 +133,7 @@ class StartWindow(QMainWindow):
     def thread_main_stream(self) -> None:
         """Метод воспроизводит главный поток видео с камер"""
         # TODO optimize
-        while True:
+        while self.stream:
             count = 0
             for capture in self.capture:
                 _, self.videoframes[count] = capture.read()
@@ -152,7 +153,8 @@ class StartWindow(QMainWindow):
                                         QtGui.QImage.Format_RGB888)
                 pic = qt_image.scaled(1024, 661, Qt.KeepAspectRatio)
                 pixmap = QtGui.QPixmap.fromImage(pic)
-                self.preview_dialog.preview.setPixmap(pixmap)
+                if pixmap is not None:
+                    self.preview_dialog.preview.setPixmap(pixmap)
             else:
                 for count in range(len(self.active_cam)):
                     if self.videoframes[count] is None:
@@ -162,7 +164,9 @@ class StartWindow(QMainWindow):
                                             QtGui.QImage.Format_RGB888)
                     pic = qt_image.scaled(281, 231, Qt.KeepAspectRatio)
                     pixmap = QtGui.QPixmap.fromImage(pic)
-                    self.main_objects['camera'][count].setPixmap(pixmap)
+
+                    if pixmap is not None:
+                        self.main_objects['camera'][count].setPixmap(pixmap)
 
     def define_cameras(self) -> None:
         if len(self.cameras) > 6:
@@ -221,15 +225,17 @@ class StartWindow(QMainWindow):
             self.preview_dialog.exec_()
             if self.preview_dialog.result() == 0:
                 self.preview = False
+                time.sleep(0.5)
             return
 
     def closeEvent(self, event) -> None:
         """Метод закрывает окно программы"""
         self.exit_program()
 
-    @staticmethod
-    def exit_program() -> None:
+    def exit_program(self) -> None:
         """Метод закрывает окно программы"""
+        self.stream = False
+        time.sleep(0.5)
         sys.exit()
 
     def start_record(self) -> None:

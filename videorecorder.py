@@ -18,9 +18,9 @@ class VideoRecorder:
         self.date = date
 
     def videorecord_init(self):
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        fourcc = cv2.VideoWriter_fourcc(*'MJPG')
         for key in self.cameras.keys():
-            self.files.append(f"camera-{key}-{self.date}.mp4")
+            self.files.append(f"camera-{key}-{self.date}.avi")
         for count in range(len(self.files)):
             self.out.append(cv2.VideoWriter(self.files[count], fourcc, 25, (1024, 768)))
 
