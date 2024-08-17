@@ -1,5 +1,5 @@
 import sys
-from typing import Tuple, Dict, Any
+from typing import Any
 
 import speech_recognition as sr
 
@@ -24,8 +24,6 @@ def define_devices() -> tuple[dict[int, Any], dict[Any, Any]]:
 def start() -> None:
     """Функция запуска главного окна"""
     cams, mics = define_devices()
-    print(cams)
-    print(mics)
     app = QApplication(sys.argv)
     main_window = StartWindow(cameras=cams, microphones=mics)
     main_window.show()
