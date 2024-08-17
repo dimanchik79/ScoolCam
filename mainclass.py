@@ -133,23 +133,15 @@ class StartWindow(QMainWindow):
 
     def thread_main_stream(self) -> None:
         """Метод воспроизводит главный поток видео с камер"""
-        # TODO optimize
         while self.stream:
             count = 0
-
             for capture in self.capture:
                 _, self.videoframes[count] = capture.read()
                 count += 1
 
-            if self.record_video:
-                count = 0
-                for out in self.out:
-                    out.write(self.videoframes[count])
-                    count += 1
-
             if self.preview:
-                if self.videoframes[self.index_camera] is None:
-                    break
+                # if self.videoframes[self.index_camera] is None:
+                #     break
                 self.flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[self.index_camera], cv2.COLOR_BGR2RGB), 1)
                 self.set_pixmap(661, 1024, 0)
             else:
@@ -271,9 +263,6 @@ class StartWindow(QMainWindow):
         SetMessage(self.msg_label, "Монтаж видео завершен", MSG_GREEN)
         self.record.setEnabled(True)  # PYQT widget button RECORD
         self.stop.setEnabled(False)  # PYQT widget button STOP
-
-        for count in range(len(self.out)):
-            self.out[count].release()
 
         self.record_video = False
         self.videorecord.stop_record()

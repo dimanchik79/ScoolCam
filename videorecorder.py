@@ -1,4 +1,3 @@
-# import subprocess
 import cv2
 
 
@@ -32,5 +31,5 @@ class VideoRecorder:
             count += 1
 
     def stop_record(self):
-        for count in range(len(self.out)):
-            self.out[count].release()
+        for out in self.out:
+            out.release()
