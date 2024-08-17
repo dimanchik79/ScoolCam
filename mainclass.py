@@ -173,9 +173,8 @@ class StartWindow(QMainWindow):
                 self.preview_dialog.preview.setPixmap(pixmap)
             else:
                 self.main_objects['camera'][_count].setPixmap(pixmap)
-        except:
+        except Exception:
             pass
-
 
     def define_cameras(self) -> None:
         if len(self.cameras) > 6:
@@ -265,7 +264,6 @@ class StartWindow(QMainWindow):
         threading.Thread(target=self.thread_timer_run, daemon=True).start()
         threading.Thread(target=self.thread_record_run, daemon=True).start()
 
-
     def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
         # TODO дописать монтаж видео
@@ -281,11 +279,9 @@ class StartWindow(QMainWindow):
         self.videorecord.stop_record()
         self.audiorecord.stop_record()
 
-
     def thread_timer_run(self) -> None:
         while self.record_video:
             self.timer.run_time()
-
 
     def thread_record_run(self) -> None:
         while self.record_video:
