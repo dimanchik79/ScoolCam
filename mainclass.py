@@ -43,6 +43,7 @@ class StartWindow(QMainWindow):
     def __init__(self, cameras: Dict, microphones: Dict) -> None:
         super(QMainWindow, self).__init__()
 
+        self.flipped_image = None
         self.videorecord = None
         self.audiorecord = None
         self.recording = None
@@ -135,6 +136,7 @@ class StartWindow(QMainWindow):
         # TODO optimize
         while self.stream:
             count = 0
+
             for capture in self.capture:
                 _, self.videoframes[count] = capture.read()
                 count += 1
@@ -148,25 +150,32 @@ class StartWindow(QMainWindow):
             if self.preview:
                 if self.videoframes[self.index_camera] is None:
                     break
-                flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[self.index_camera], cv2.COLOR_BGR2RGB), 1)
-                qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
-                                        QtGui.QImage.Format_RGB888)
-                pic = qt_image.scaled(1024, 661, Qt.KeepAspectRatio)
-                pixmap = QtGui.QPixmap.fromImage(pic)
-                if pixmap is not None:
-                    self.preview_dialog.preview.setPixmap(pixmap)
+                self.flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[self.index_camera], cv2.COLOR_BGR2RGB), 1)
+                self.set_pixmap(661, 1024, 0)
             else:
                 for count in range(len(self.active_cam)):
                     if self.videoframes[count] is None:
                         continue
-                    flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[count], cv2.COLOR_BGR2RGB), 1)
-                    qt_image = QtGui.QImage(flipped_image.data, flipped_image.shape[1], flipped_image.shape[0],
-                                            QtGui.QImage.Format_RGB888)
-                    pic = qt_image.scaled(281, 231, Qt.KeepAspectRatio)
-                    pixmap = QtGui.QPixmap.fromImage(pic)
+                    self.flipped_image = cv2.flip(cv2.cvtColor(self.videoframes[count], cv2.COLOR_BGR2RGB), 1)
+                    self.set_pixmap(231, 231, _count=count)
 
-                    if pixmap is not None:
-                        self.main_objects['camera'][count].setPixmap(pixmap)
+    def set_pixmap(self, _height, _width, _count) -> None:
+        """Метод устанавливает pixmap"""
+        qt_image = QtGui.QImage(self.flipped_image.data, self.flipped_image.shape[1],
+                                self.flipped_image.shape[0],
+                                QtGui.QImage.Format_RGB888)
+        pixmap = None
+        while pixmap is None:
+            pic = qt_image.scaled(_width, _height, Qt.KeepAspectRatio)
+            pixmap = QtGui.QPixmap.fromImage(pic)
+        try:
+            if self.preview:
+                self.preview_dialog.preview.setPixmap(pixmap)
+            else:
+                self.main_objects['camera'][_count].setPixmap(pixmap)
+        except:
+            pass
+
 
     def define_cameras(self) -> None:
         if len(self.cameras) > 6:
@@ -256,13 +265,14 @@ class StartWindow(QMainWindow):
         threading.Thread(target=self.thread_timer_run, daemon=True).start()
         threading.Thread(target=self.thread_record_run, daemon=True).start()
 
+
     def stop_record(self) -> None:
         """Метод останавливает процедуру записи видео"""
         # TODO дописать монтаж видео
 
         SetMessage(self.msg_label, "Монтаж видео завершен", MSG_GREEN)
         self.record.setEnabled(True)  # PYQT widget button RECORD
-        self.stop.setEnabled(False)   # PYQT widget button STOP
+        self.stop.setEnabled(False)  # PYQT widget button STOP
 
         for count in range(len(self.out)):
             self.out[count].release()
@@ -271,9 +281,11 @@ class StartWindow(QMainWindow):
         self.videorecord.stop_record()
         self.audiorecord.stop_record()
 
+
     def thread_timer_run(self) -> None:
         while self.record_video:
             self.timer.run_time()
+
 
     def thread_record_run(self) -> None:
         while self.record_video:
